@@ -10,3 +10,4 @@
 ### 前端工具
 
 - [项目中怎么添加eslint代码检查及eslint基本配置](https://github.com/willson-wang/Blog/issues/1)
+- [项目中怎么配置webpack](https://github.com/willson-wang/Blog/issues/2)
