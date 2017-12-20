@@ -15,7 +15,7 @@
 
 ### 前端框架
 - [vue项目中引入echart.js来制作图表](https://github.com/willson-wang/Blog/issues/3)
-- [vue项目中vuex的使用总结](https://github.com/willson-wang/Blog/issues/6)
+- [vuex的使用总结](https://github.com/willson-wang/Blog/issues/6)
 
 
 ### CSS
