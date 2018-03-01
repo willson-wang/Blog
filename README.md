@@ -37,8 +37,14 @@
 - [underscore源码解析（二）](https://github.com/willson-wang/Blog/issues/17)
 - [js常见问题总结与分析](https://github.com/willson-wang/Blog/issues/18)
 - [常用设计模式](https://github.com/willson-wang/Blog/issues/21)
+- [jquery-barcode/JsBarcode条码生成插件](https://github.com/willson-wang/Blog/issues/23)
+- [函数防抖](https://github.com/willson-wang/Blog/issues/25)
+- [函数节流](https://github.com/willson-wang/Blog/issues/26)
+- [深拷贝与浅拷贝](https://github.com/willson-wang/Blog/issues/27)
+- [数组去重、数组去重并寻找最大项、数组排序](https://github.com/willson-wang/Blog/issues/28)
 
 ### CSS
 - [CSS3属性box-shadow的正确使用姿势](https://github.com/willson-wang/Blog/issues/4)
 - [CSS3属性border-radius的正确使用姿势](https://github.com/willson-wang/Blog/issues/5)
 - [css常用样式及问题小结](https://github.com/willson-wang/Blog/issues/19)
+- [flex布局及应用](https://github.com/willson-wang/Blog/issues/22)
