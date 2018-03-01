@@ -4,7 +4,7 @@
 ### 博客分类
 博客主要分以下几大类
 - [开发工具](https://github.com/willson-wang/Blog/projects/2)
-- [WEB综合](https://github.com/willson-wang/Blog/projects/4)
+- [WEB综合](https://github.com/willson-wang/Blog/projects/6)
 - [前端框架](https://github.com/willson-wang/Blog/projects/1)
 - [CSS](https://github.com/willson-wang/Blog/projects/3)
 - [JavaScript](https://github.com/willson-wang/Blog/projects/5)
