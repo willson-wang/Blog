@@ -14,11 +14,18 @@
 
 - [项目中怎么添加eslint代码检查及eslint基本配置](https://github.com/willson-wang/Blog/issues/1)
 - [项目中怎么配置webpack](https://github.com/willson-wang/Blog/issues/2)
+- [git在实际开发中的应用场景](https://github.com/willson-wang/Blog/issues/32)
+- [使用eslint+husky+lint-staged+prettier构建统一的代码风格及代码检查工作流](https://github.com/willson-wang/Blog/issues/46)
 
 
 ### WEB综合
 - [浏览器内的事件循环机制及macrotask与microtask 浏览器](https://github.com/willson-wang/Blog/issues/7)
 - [HTML5、HTTP、WEB综合汇总](https://github.com/willson-wang/Blog/issues/20)
+- [记录一次php、apache、mysql、composer、wampserver安装过程](https://github.com/willson-wang/Blog/issues/31)
+- [cookie小结](https://github.com/willson-wang/Blog/issues/38)
+- [node shell pre-commit eslint prettier](https://github.com/willson-wang/Blog/issues/48)
+- [bash shell pre-commit eslint prettier](https://github.com/willson-wang/Blog/issues/49)
+
 
 ### 前端框架
 - [vue项目中引入echart.js来制作图表](https://github.com/willson-wang/Blog/issues/3)
@@ -27,6 +34,7 @@
 - [vue项目中怎么引入mockjs](https://github.com/willson-wang/Blog/issues/12)
 - [vue开发小结](https://github.com/willson-wang/Blog/issues/14)
 - [vue响应式原理](https://github.com/willson-wang/Blog/issues/15)
+- [记一次indexList组件的开发](https://github.com/willson-wang/Blog/issues/41)
 
 ### JavaScript
 - [js内获取尺寸的属性or方法汇总](https://github.com/willson-wang/Blog/issues/8)
@@ -42,9 +50,14 @@
 - [函数节流](https://github.com/willson-wang/Blog/issues/26)
 - [深拷贝与浅拷贝](https://github.com/willson-wang/Blog/issues/27)
 - [数组去重、数组去重并寻找最大项、数组排序](https://github.com/willson-wang/Blog/issues/28)
+- [Promise/Generator/Async相关的异步操作](https://github.com/willson-wang/Blog/issues/37)
+- [图片上传的姿势](https://github.com/willson-wang/Blog/issues/39)
+- [xhr的使用姿势](https://github.com/willson-wang/Blog/issues/40)
+- [基于axios的xhr封装](https://github.com/willson-wang/Blog/issues/42)
 
 ### CSS
 - [CSS3属性box-shadow的正确使用姿势](https://github.com/willson-wang/Blog/issues/4)
 - [CSS3属性border-radius的正确使用姿势](https://github.com/willson-wang/Blog/issues/5)
 - [css常用样式及问题小结](https://github.com/willson-wang/Blog/issues/19)
 - [flex布局及应用](https://github.com/willson-wang/Blog/issues/22)
+- [background-size与背景图片展示](https://github.com/willson-wang/Blog/issues/45)
