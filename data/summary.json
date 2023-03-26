@@ -1,0 +1,42 @@
+{
+    "vite原理与实践记录": {
+        "number": "101",
+        "summary": "近期将vite引入项目之后，发现vite相对webpack这种bundle方案在开发环境确实能够带来很大的效率提升，本篇主要简单介绍vite的原理及落地过程中碰到的一些问题"
+    },
+    "debug log在项目中的实践": {
+        "number": "102",
+        "summary": "在开发一些工具包的时候，往往需要日志帮助排查问题，而通过console.log的方式稍显繁琐，而debug包是一个已经封装好了的debug日志库，只需要通过环境变量就可以开启"
+    },
+    "为什么git clone ssh地址输入密码总是失败": {
+        "number": "103",
+        "summary": "主要记录 git clone 项目过程中碰到输入密码也还是无法正常clone项目的问题，以及相关的原理与解决方式"
+    },
+    "快速理解node glob语法": {
+        "number": "104",
+        "summary": "glob语法在我们的日常开发中经常使用，比如babel、eslint、stylelint等工具中，这一篇的目的主要是记录glob常用语法，帮助我们可以在项目中快速写出满足条件的glob表达式"
+    },
+    "解决husky4.3.8版本在部分电脑上无法使用问题": {
+        "number": "105",
+        "summary": "主要记录husky4.3.8版本在部分电脑上无法使用问题，方便以后排查问题"
+    },
+    "eval、new Function与source-map": {
+        "number": "106",
+        "summary": "主要记录eval、new Function两种方式执行js代码时，对于source-map的处理，可以帮助我们在相关的场景达成某些目标"
+    },
+    "babel polyfill指南": {
+        "number": "107",
+        "summary": "babel 内部又一次重构了polyfill相关的逻辑，所以本篇就是阐述最新babel polyfill的原理，及我们在项目中应该怎么运用"
+    },
+    "webpack4+ Tree shaking原理": {
+        "number": "108",
+        "summary": "帮助快速了解tree-shaking的由来，及webpack Tree shaking 原理，最后提供一些我们在日常开发中的推荐配置与代码书写规范"
+    },
+    "yarn install超时问题排查": {
+        "title": "yarn install超时问题排查",
+        "summary": "记录项目在云服务器上yarn install失败，我们应该怎么去排查与解决问题的方式与方法"
+    },
+    "自定义Node镜像": {
+        "number": "111",
+        "summary": "封装Node镜像，在node镜像内内置一些常用功能，比如添加.npmrc，设置代理源等，帮助我们避免一些项目构建中的常见问题"
+    }
+}
