@@ -1,0 +1,93 @@
+ul[role='slug-list']:empty {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+ul[role='slug-list'] li > a.active {
+  color: rgb(99 102 241 / var(--tw-text-opacity));
+}
+
+ul[role='slug-list'] li[data-depth='2'] {
+  padding-left: 12px;
+}
+
+ul[role='slug-list'] li[data-depth='3'] {
+  padding-left: 24px;
+}
+
+.default-layout-toc {
+  background-color: #fff;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  list-style: none;
+  margin: 0;
+  max-height: calc(90vh - 80px);
+  overflow: auto;
+  padding: 0 24px 0 0;
+  position: fixed;
+  right: 0;
+  top: 50px;
+  width: 186px;
+  z-index: 10;
+}
+
+[data-prefers-color=dark] .default-layout-toc {
+  background-color: #141414;
+}
+@media only screen and (max-width: 767px) {
+  .default-layout-toc {
+    display: none;
+  }
+}
+.default-layout-toc li {
+  position: relative;
+  margin: 0;
+  padding: 4px 0 4px 6px;
+  text-indent: 12px;
+  font-size: 13px;
+  line-height: 1.40625;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.default-layout-toc li a {
+  color: #454d64;
+  text-decoration: none;
+}
+[data-prefers-color=dark] .default-layout-toc li a {
+  color: rgba(255, 255, 255, 0.85);
+}
+.default-layout-toc li a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: inline-block;
+  width: 2px;
+  background: #ebedf1;
+}
+.default-layout-toc li a:hover {
+  color: rgb(79 70 229 / var(--tw-text-opacity));;
+}
+[data-prefers-color=dark] .default-layout-toc li a:hover {
+  color: #f86437;
+}
+.default-layout-toc li a:active {
+  color: #f7673c;
+}
+[data-prefers-color=dark] .default-layout-toc li a:active {
+  color: #f85c2d;
+}
+.default-layout-toc li a.active {
+  color: #f65c2d;
+}
+[data-prefers-color=dark] .default-layout-toc li a.active {
+  color: #f7511e;
+}
+.default-layout-toc li a.active::before {
+  background: rgb(99 102 241 / var(--tw-text-opacity));
+}
+[data-prefers-color=dark] .default-layout-toc li a.active::before {
+  background: #f7511e;
+}

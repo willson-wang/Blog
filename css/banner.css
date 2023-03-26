@@ -1,0 +1,14 @@
+.anim {
+    margin-bottom: 30px;
+}
+
+.anim,
+.anim svg {
+    position: relative;
+    width: 100%;
+    height: 420px;
+}
+
+.anim path {
+    stroke-width: 2;
+}
