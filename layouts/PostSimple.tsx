@@ -16,13 +16,13 @@ interface LayoutProps {
   children: ReactNode
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
+  toc: any
 }
 
 export default function PostLayout({ content, next, prev, children, toc }: LayoutProps) {
   const [loadComments, setLoadComments] = useState(false)
 
   const { path, slug, date, title, readingTime } = content
-  console.log('slug', readingTime);
   return (
     <SectionContainer>
       <BlogSEO url={`${siteMetadata.siteUrl}/${path}`} {...content} />
@@ -38,7 +38,8 @@ export default function PostLayout({ content, next, prev, children, toc }: Layou
                 <div>
                   <dt className="sr-only">Published on</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    发布于<time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>·预估阅读{Math.ceil(readingTime.minutes)}分钟
+                    发布于<time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                    ·预估阅读{Math.ceil(readingTime.minutes)}分钟
                   </dd>
                 </div>
               </dl>

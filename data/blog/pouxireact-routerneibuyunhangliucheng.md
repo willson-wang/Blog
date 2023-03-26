@@ -358,7 +358,7 @@ function createTransitionManager() {
 }
 ```
 
-push、replace方法内部调用createTransitionManager内的confirmTransitionTo方法，confirmTransitionTo方法内会做拦截相关的处理，后面说，执行拦截操作之后，调用callback，如果为true，则通过history.pushState || history.replaceState进行url的真正跳转；跳转之后执行setState方法，并传入{ action, location }参数；setState内直接调用transitionManager.notifyListeners方法，transitionManager.notifyListeners方法内会执行所有通过listen注册的回调函数，并传入更新后的location参数；最终触发Router组件内注册的监听函数，触发视图更新
+push、replace方法内部调用createTransitionManager内的confirmTransitionTo方法，confirmTransitionTo方法内会做拦截相关的处理，后面说，执行拦截操作之后，调用callback，如果为true，则通过history.pushState || history.replaceState进行url的真正跳转；跳转之后执行setState方法，并传入`{ action, location }`参数；setState内直接调用transitionManager.notifyListeners方法，transitionManager.notifyListeners方法内会执行所有通过listen注册的回调函数，并传入更新后的location参数；最终触发Router组件内注册的监听函数，触发视图更新
 
 ### 浏览器前进后退怎么触发视图更新
 

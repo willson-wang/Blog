@@ -24,7 +24,7 @@
 | npm install webpack -D | yarn add webpack -D |
 | npm i qs@6.0.0  | yarn add qs@6.0.0 |
 | npm i react react-dom prop-types --save | yarn add react react-dom prop-types |
-| npm i @babel/{core,cli} --save-dev  | yarn add @babel/{core,cli} --dev |
+| npm i `@babel/{core,cli}` --save-dev  | yarn add `@babel/{core,cli}` --dev |
 | npm i npm-checked -g | yarn global add npm-checked |
 
 3. 卸载模块
@@ -33,7 +33,7 @@
 | --  | -- |
 | npm uninstall webpack | yarn remove webpack |
 | npm uninstall react react-dom prop-types | yarn remove react react-dom prop-types |
-| npm uninstall @babel/{core,cli}  | yarn remove @babel/{core,cli} |
+| npm uninstall `@babel/{core,cli}`  | yarn remove `@babel/{core,cli}` |
 
 4. 获取安装包信息
 

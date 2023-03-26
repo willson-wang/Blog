@@ -113,6 +113,7 @@ export default function ListLayout({
           {!filteredBlogPosts.length && '暂无数据'}
           {displayPosts.map((frontMatter) => {
             const { slug } = frontMatter
+            // @ts-ignore
             return <Article {...frontMatter} key={slug} />
           })}
         </ul>

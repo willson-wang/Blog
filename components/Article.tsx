@@ -23,7 +23,7 @@ type PostFrontMatter = {
 
 export default function Article({ slug, date, title, summary, tags, images }: PostFrontMatter) {
   const src = Array.isArray(images) ? images[0] : images
-  const newSummary  = summary || (summaryJson[title] && summaryJson[title].summary)
+  const newSummary = summary || (summaryJson[title] && summaryJson[title].summary)
   return (
     <li className="py-12">
       <article>

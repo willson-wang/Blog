@@ -28,6 +28,7 @@ module.exports = {
         aspects: ['invalidHref', 'preferButton'],
       },
     ],
+    "jsx-a11y/aria-role": 0,
     'react/prop-types': 0,
     'no-unused-vars': 0,
     'react/no-unescaped-entities': 0,

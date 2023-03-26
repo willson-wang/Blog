@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 const fs = require('fs-extra')
 const path = require('path')
 const { pinyin } = require('pinyin')

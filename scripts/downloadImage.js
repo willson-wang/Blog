@@ -1,3 +1,4 @@
+/* eslint-disable */
 const url = 'https://cdn.nlark.com/yuque/0/2022/png/22209851/1667274524829-83f970d4-64e3-4a54-b196-c5f330f736bd.png';
 
 const download = require('image-downloader');

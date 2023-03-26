@@ -38,6 +38,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
           {!posts.length && '暂无数据'}
           {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
             const { slug } = frontMatter
+            // @ts-ignore
             return <Article {...frontMatter} key={slug} />
           })}
         </ul>

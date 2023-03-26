@@ -30,9 +30,17 @@ interface LayoutProps {
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
   children: ReactNode
+  toc: any
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children, toc }: LayoutProps) {
+export default function PostLayout({
+  content,
+  authorDetails,
+  next,
+  prev,
+  children,
+  toc,
+}: LayoutProps) {
   const { filePath, path, slug, date, title, tags, readingTime } = content
   const basePath = path.split('/')[0]
   const [loadComments, setLoadComments] = useState(false)
@@ -41,7 +49,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
       <BlogSEO url={`${siteMetadata.siteUrl}/${path}`} authorDetails={authorDetails} {...content} />
       <ScrollTopAndComment />
       <article>
-        <div >
+        <div>
           <header className="pt-6 xl:pb-6">
             <div className="space-y-1 text-center">
               <div>
@@ -51,7 +59,8 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 <div>
                   <dt className="sr-only">Published on</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    发布于<time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>·预估阅读{Math.ceil(readingTime.minutes)}分钟
+                    发布于<time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                    ·预估阅读{Math.ceil(readingTime.minutes)}分钟
                   </dd>
                 </div>
               </dl>
