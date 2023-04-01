@@ -38,5 +38,125 @@
     "自定义Node镜像": {
         "number": "111",
         "summary": "封装Node镜像，在node镜像内内置一些常用功能，比如添加.npmrc，设置代理源等，帮助我们避免一些项目构建中的常见问题"
+    },
+    "借助rollup构建npm包最佳实践": {
+        "number": "99",
+        "summary": "主要介绍rollup快速构建npm包，常用的rollup插件，及使用rollup过程中碰到的一些问题，及最终总结一些最佳实践"
+    },
+    "yarn --frozen-lockfile install失败": {
+        "number": "98",
+        "summary": "记录CI场景下偶尔会碰到package.json与yarn.lock文件不匹配导致的错误，应该怎样去快速解决"
+    },
+    "lerna管理Monorepo项目实践": {
+        "number": "97",
+        "summary": "记录使用lerna管理Monorepo项目中碰到的一些问题，及lerna常见命令应该怎么使用，并最终总结一些最佳实践"
+    },
+    "了解ESLint各个parser之间的关系": {
+        "number": "96",
+        "summary": "了解ESLint各个parser之间的关系，帮助进一步了解eslint的原理及快速解决碰到的一些eslint问题"
+    },
+    "Redux中间件Middleware是怎样实现的？": {
+        "number": "94",
+        "summary": "从源码角度理解Redux中间件的设计与实现，帮助我们在项目中更加灵活运行redux中间件"
+    },
+    "css及js是怎样阻塞dom解析及页面渲染": {
+        "number": "93",
+        "summary": "了解link标签、script标签加载时会不会阻塞dom解析及页面渲染，帮助我们进一步理解浏览器的渲染原理，及开发中我们应该怎么去避免这些情况"
+    },
+    "为什么需要使用webpack.DefinePlugin插件": {
+        "number": "92",
+        "summary": "了解node中的环境变量，了解cross-env的作用，及了解为什么需要使用webpack.DefinePlugin插件，及利用webpack.DefinePlugin插件可以帮助我们做一些什么样的事情"
+    },
+    "预渲染-解决页面白屏问题": {
+        "number": "91",
+        "summary": "了解当前spa大行其道的时候，首屏白屏问题越来越受到关注，那么目前行业内针对首屏白屏的问题有了多种解决方案，比如ssr、预渲染等，这里要说的就是预渲染，因为相对于ssr，前端项目接入预渲染的成本相对低一些"
+    },
+    "React中为什么要使用不可变数据（Immutable Data）": {
+        "number": "90",
+        "summary": "了解什么是可变数据，什么事不可变数据；不可变数据的几种实现及不可变数据在项目中的运用"
+    },
+    "剖析react-router内部运行流程": {
+        "number": "88",
+        "summary": "剖析react-router内部运行流程，了解前端路由的本质，理解前端路由是怎么与react结合的，并最终帮助我们在项目中熟练使用react-router及快速解决路由相关的问题"
+    },
+    "剖析vue-router内部运行流程": {
+        "number": "88",
+        "summary": "剖析vue-router内部运行流程，了解前端路由的本质，理解前端路由是怎么与vue结合的，并最终帮助我们在项目中熟练使用vue-router及快速解决路由相关的问题"
+    },
+    "快速掌握前端路由": {
+        "number": "85",
+        "summary": "了解什么是前端路由，理解hash路由与history路由的区别，最后学会如何去封装一个通用的前端路由库"
+    },
+    "一文看懂移动端适配": {
+        "number": "84",
+        "summary": "了解Flexible方案能够实现移动端适配的原理，了解1px文艺、多倍图问题，最终我们应该选择什么样的方案去达成我们的目的"
+    },
+    "观察者模式与发布订阅模式的区别": {
+        "number": "83",
+        "summary": "了解什么是观察者模式，了解什么是发布订阅模式及二者的区别"
+    },
+    "深入应用Vue render 函数": {
+        "number": "82",
+        "summary": "在vue项目的日常开发中基本都是template模版形式，几乎不会用到render函数去生成模版，最近因为有需求，需要更加灵活的生成模版，所以深入了解了一下render函数，本篇主要记录一些render函数的应用场景"
+    },
+    "解决项目中的循环引用": {
+        "number": "79",
+        "summary": "了解依赖循环，及怎么去解决项目中的依赖循环问题，以实际开发项目webpack及bable为例子"
+    },
+    "本地调试微信jssdk": {
+        "number": "78",
+        "summary": "因为微信jssdk的使用是需要绑定js安全域名，所以我们在普通的本地环境是无法正常调试微信jssdk的，只能上传代码到我们的测试or生产环境去进行调试；但是这样一来一去花费的时间跟精力瞬间就成倍增加长了，本篇主要总结本地应该怎么去快速调试微信jssdk，以提高我们的开发效率；"
+    },
+    "深入了解XMLHttpRequest兼容性": {
+        "number": "77",
+        "summary": "了解XMLHttpRequest的兼容性，了解axios内部是怎么处理XMLHttpRequest兼容性的，及wathwg-fetch又是怎么处理兼容性的"
+    },
+    "手动搭建webpack-dev-server": {
+        "number": "74",
+        "summary": "了解webpack-dev-server内部到底做了哪些事情，及自己怎么实现一个webpack-dev-server"
+    },
+    "docker快速上手指南": {
+        "number": "73",
+        "summary": "docker作为现在炙手可热的技术，不论是后端、前端、运维都需要掌握这门技术，本篇主要记录一些docker的常用概念及一些前端常用的docker命令"
+    },
+    "npm && yarn常用命令": {
+        "number": "72",
+        "summary": "对比记录npm与yarn的相关命令，帮助我们快速理解各个命令，已达到不同的包管理工具之前切换"
+    },
+    "记一次React15升级到React16过程": {
+        "number": "71",
+        "summary": "记一次React15成功升级到React16过程的过程，及过程中碰到的问题"
+    },
+    "webpack3极致分包": {
+        "number": "70",
+        "summary": "项目中目前使用的是webpack3.8.1版本，然后准备将webpack升级到4.x版本，在升级的过程中，碰到了分包的变化，所以先详细的记录下webpack3.x，然后在另外记录webpack4.x版本中关于分包的对比"
+    },
+    "JavaScript中的AST": {
+        "number": "69",
+        "summary": "了解什么是AST、了解 ESTree 定义、了解常用的JavaScript Parser及生成AST的过程、最后了解AST在JavaScript内的一些常见应用场景"
+    },
+    "深入理解babel生态": {
+        "number": "67",
+        "summary": "了解babel是什么、babel的使用方式、babel的处理流程、babel的架构，深入理解babel6.x插件与7.x差异，及怎样写一个babel插件，最后总结babel推荐配置"
+    },
+    "深入理解polyfill": {
+        "number": "66",
+        "summary": "了解什么是polyfill、ECMASCRIPT近几年发布了哪些版本及新的api，兼容性总结，了解core-js是怎么去实现polyfill的、及如何在项目内使用browserslist"
+    },
+    "前端自动化测试&持续集成": {
+        "number": "65",
+        "summary": "了解什么是持续集成，如何使用Travis CI来做持续集成，最后以发布一个npm包为例"
+    },
+    "修改npm及yarn的源": {
+        "number": "64",
+        "summary": "如果修改npm or yarn源，及借助第三方工具实现快速切换npm及yarn源"
+    },
+    "微信小程序中调用百度地图相关api": {
+        "number": "63",
+        "summary": "微信小程序中调用百度地图相关api相关代码实现"
+    },
+    "Vue中引入sentry收集前端错误日记": {
+        "number": "60",
+        "summary": "Vue项目中如何引入sentry收集前端错误日记"
     }
 }
