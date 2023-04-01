@@ -2,13 +2,13 @@
 
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: '12345上山打老虎',
+  title: '往事随风',
   author: 'willson-wang',
   headerTitle: 'Blog',
   description: '枯藤老树昏鸦，小桥流水人家，古道西风瘦马，撸码人在天涯',
   language: 'zh-cn',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
+  siteUrl: 'https://blog.willson-wang.com',
   siteRepo: 'https://github.com/willson-wang/Blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
