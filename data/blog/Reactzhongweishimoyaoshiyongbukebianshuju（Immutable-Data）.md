@@ -6,6 +6,7 @@
   tags: ["前端框架"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/react.png']
   bibliography: references-data.bib
 ---
 

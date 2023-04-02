@@ -6,6 +6,7 @@
   tags: ["浏览器"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/chrome.jpeg']
   bibliography: references-data.bib
 ---
 

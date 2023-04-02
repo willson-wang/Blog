@@ -6,6 +6,7 @@
   tags: ["HTML5"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/chrome2.jpeg']
   bibliography: references-data.bib
 ---
 

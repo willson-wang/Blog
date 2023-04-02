@@ -10,7 +10,7 @@ const siteMetadata = {
   theme: 'system', // system, dark or light
   siteUrl: 'https://blog.willson-wang.com',
   siteRepo: 'https://github.com/willson-wang/Blog',
-  siteLogo: '/static/images/logo.png',
+  siteLogo: '/static/images/logo1.png',
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
   email: 'wangkangsen168@163.com',
@@ -25,7 +25,7 @@ const siteMetadata = {
     // content security policy in the `next.config.js` file.
     // supports plausible, simpleAnalytics, umami or googleAnalytics
     plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
-    simpleAnalytics: false, // true or false
+    simpleAnalytics: true, // true or false
     umamiWebsiteId: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
     posthogProjectApiKey: '', // e.g. AhnJK8392ndPOav87as450xd
     googleAnalyticsId: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, // e.g. UA-000000-2 or G-XXXXXXX

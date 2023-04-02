@@ -6,6 +6,7 @@
   tags: ["node"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/glob.webp']
   bibliography: references-data.bib
 ---
 

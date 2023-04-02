@@ -6,6 +6,7 @@
   tags: ["包管理工具"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/npm.png']
   bibliography: references-data.bib
 ---
 

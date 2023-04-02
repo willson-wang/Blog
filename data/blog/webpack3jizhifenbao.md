@@ -6,6 +6,7 @@
   tags: ["开发工具"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/webpack3.jpeg']
   bibliography: references-data.bib
 ---
 

@@ -6,6 +6,7 @@
   tags: ["node"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/nodejs2.png']
   bibliography: references-data.bib
 ---
 

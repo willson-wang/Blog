@@ -6,6 +6,7 @@
   tags: ["CSS"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/css.png']
   bibliography: references-data.bib
 ---
 

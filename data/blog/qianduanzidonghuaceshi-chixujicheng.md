@@ -6,6 +6,7 @@
   tags: ["Test"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/travis.png']
   bibliography: references-data.bib
 ---
 

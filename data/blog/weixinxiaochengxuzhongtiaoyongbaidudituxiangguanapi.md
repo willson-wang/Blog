@@ -6,6 +6,7 @@
   tags: ["原生JS"]
   draft: false
   layout: PostLayout
+  images: ['/static/images/banner/weixin.jpeg']
   bibliography: references-data.bib
 ---
 
