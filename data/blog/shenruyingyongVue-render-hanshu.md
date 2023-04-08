@@ -3,7 +3,7 @@
   date: 2020-05-22T15:39:58Z
   lastmod: 2023-03-26T09:29:44Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "vue", "vue render"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/vuejs.png']
@@ -21,7 +21,7 @@
 3、理解render函数中的scopeSlot
 4、对比2.6之后slot的新旧语法
 
-<h3>如何使用render函数生成与template写法一致的模版</h3>
+## 如何使用render函数生成与template写法一致的模版
 
 Vue 通过建立一个虚拟 DOM 来追踪自己要如何改变真实 DOM，而虚拟DOM则通过createElement方法创建，一个简单的虚拟DOM如下所示
 
@@ -492,7 +492,7 @@ export default {
 }
 ```
 
-<h3>理解render函数中的slot</h3>
+## 理解render函数中的slot
 
 slot的目的是，允许在父组件内使用子组件时可以向子组件传入不同的内容
 
@@ -707,7 +707,7 @@ export default {
 <h4>从上面我们可以看出，当createElemet的第一个元素是组件时，第二个参数内的props是传入第一个组件参数内的props；第二个参数内的slot参数用于指定当前的虚拟dom元素，插入子组件内的哪个slot内；如果子组件也是render写法，默认插槽通过this.$slots.default，具名插槽通过this.$slots['my-slot']渲染</h4>
 
 
-<h3>理解render函数中的scopeSlot</h3>
+## 理解render函数中的scopeSlot
 
 <h4>child template 写法</h4>
 
@@ -927,7 +927,7 @@ this.$scopedSlots['child-solt']({
 </b>
 
 
-<h3>对比2.6之后slot的新旧语法</h3>
+## 对比2.6之后slot的新旧语法
 
 <h4>定义包含slot的子组件</h4>
 

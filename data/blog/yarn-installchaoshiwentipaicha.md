@@ -1,9 +1,9 @@
 ---
-  title: yarn install超时问题排查
+  title: yarn install 超时
   date: 2022-12-16T14:29:14Z
   lastmod: 2022-12-16T14:37:37Z
   summary: 
-  tags: ["包管理工具"]
+  tags: ["包管理工具", "yarn", "install", "network"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/yarn.png']

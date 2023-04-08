@@ -3,7 +3,7 @@
   date: 2022-12-16T14:35:31Z
   lastmod: 2022-12-16T14:37:18Z
   summary: 
-  tags: ["包管理工具"]
+  tags: ["包管理工具", "docker", "Node镜像", "npm", "yarn"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/nodejs.png']

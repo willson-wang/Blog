@@ -3,7 +3,7 @@
   date: 2017-12-26T11:17:29Z
   lastmod: 2018-02-28T03:11:13Z
   summary: 
-  tags: ["浏览器"]
+  tags: ["浏览器", "macrotask", "microtask"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

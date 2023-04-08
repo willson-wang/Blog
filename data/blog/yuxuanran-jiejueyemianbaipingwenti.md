@@ -1,16 +1,16 @@
 ---
-  title: 预渲染-解决页面白屏问题
+  title: 预渲染实现
   date: 2020-11-19T10:17:21Z
   lastmod: 2020-11-19T10:18:23Z
   summary: 
-  tags: ["HTML5"]
+  tags: ["HTML5", "预渲染", "白屏"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/chrome2.jpeg']
   bibliography: references-data.bib
 ---
 
-### 前言
+## 前言
 
 目前spa大行其道的时候，首屏白屏问题越来越受到关注，那么目前行业内针对首屏白屏的问题有了多种解决方案，比如ssr、预渲染等
 
@@ -22,7 +22,7 @@
 
 那么我们看下一般的spa项目服务端返回的index.html，如下所示
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en"><head>
     <meta charset="UTF-8">
@@ -49,13 +49,15 @@
 3. 前端框架生成dom树并挂载的时间 - 实际白屏时间
 4. 如果首页的路由是懒加载的方式进行加载，还需要加上子路由的静态资源加载及前端框架重新渲染的时间 - 实际白屏时间
 
-那么预渲染又是什么呢？
+## 什么是预渲染
 
 上面我已经知道了白屏时间主要由两部分组成，理论白屏时间+实际白屏时间；理论白屏时间需要我们通过网络及服务器来进行相关的优化，并且这个优化一般也很难有提升；那么针对这个实际白屏时间，我们是不是有优化空间呢？是的，这一部分有很大的优化空间，如果我们直接返回的index.html内就包含了首页需要渲染的dom结构，那么是不是当index.html加载完成之后，我们就可以直接看到返回的dom结构呢？我们还是通过chrome浏览器的performance来看下整个页面渲染的过程
 
 ![image](https://user-images.githubusercontent.com/20950813/99651092-238d0100-2a91-11eb-9ad0-b4c89613a263.png)
 
 我们从图上可以看出来，实际白屏时间已经几乎没有了，这种先将对应的dom结构提前生成到index.html内的方式就叫预渲染
+
+### 静态数据预渲染
 
 那么我们在实际项目中怎么去做预渲染，我们不可能动过手动的方式去把dom结构写到到index.html内去，那我们实现自动插入的思路是怎样的呢？
 
@@ -82,7 +84,7 @@
 
 第二个思路：每个页面都生成一份对应有预渲染dom的html，除了预渲染dom不一样，其它引入的js、css都一样,如下所示
 
-```
+```html
 首页 ／
 
 <div id="app">
@@ -100,7 +102,7 @@
 
 看下常用的用来生成预渲染页面的插件
 
-```
+```js
 const path = require('path')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 
@@ -118,6 +120,8 @@ module.exports = {
 ```
 
 更多使用方式直接[参考文档](https://github.com/chrisvfritz/prerender-spa-plugin)
+
+### 动态数据预渲染
 
 除了上面预渲染思路还有没有其它的预渲染思路，有骨架屏
 
@@ -138,7 +142,7 @@ module.exports = {
 常用的生成骨架屏的插件
 
 饿了么的骨架屏插件page-skeleton-webpack-plugin
-```
+```js
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { SkeletonPlugin } = require('page-skeleton-webpack-plugin')
 const path = require('path')
@@ -165,7 +169,7 @@ const webpackConfig = {
 
 auto-skeleton-cli
 
-```
+```js
 module.exports = {
     "url": "https://m.jd.com/",
     "wrapEle": "body",
@@ -195,6 +199,6 @@ module.exports = {
 
 <img width="375"  src="https://user-images.githubusercontent.com/20950813/99652402-bed2a600-2a92-11eb-9a75-62e2abfc614b.png"  />
 
-### 总结
+## 总结
 
 我们首先要知道白屏时间主要由两部分组成理论白屏实际+实际白屏时间，我们可以通过预渲染的方式优化我们的实际白屏时间；需要注意的是如果我们的路由不是通过懒加载的方式进行加载的，我们的预渲染的dom结构可以直接生成到id=app的节点内，等待框架自动挂载替换app节点内的内容；如果我们的路由是通过懒加载的方式实现的，有两个思路，第一个预渲染的dom还是放到id=app内的节点内，但是这里还要处理子路由对应的js及框架render的这个时间；第二个思路就是将预渲染的dom放到id=app同级的一个div内，然后在路由加载完成之后在隐藏这个div

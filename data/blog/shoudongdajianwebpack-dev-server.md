@@ -3,7 +3,7 @@
   date: 2020-01-28T09:07:41Z
   lastmod: 2020-02-01T09:04:05Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "webpack", "webpack-dev-server"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/webpack5.jpeg']
@@ -16,19 +16,19 @@ Retain application state which is lost during a full reload.
 Save valuable development time by only updating what's changed.
 Instantly update the browser when modifications are made to CSS/JS in the source code, which is almost comparable to changing styles directly in the browser's dev tools.
 
-<h3>浏览器是怎么知道webpack重新编译了代码？</h3>
+## 浏览器是怎么知道webpack重新编译了代码？
 
 因为webpack-hot-middleware通过sse将重新编译产生的hash值及变化的模块信息推送到了客户端
 
-<h3>浏览器又是怎样拿到webpack编译的代码？</h3>
+## 浏览器又是怎样拿到webpack编译的代码？
 
 webpack-hot-middleware提供了sse的客户端、当接收到服务端发送来的消息时，会通过process-update内调用module.hot.check方法及module.hot.apply方法促使客户端下载更新的模块及hot-update.json
 
-<h3>浏览器拿到webpack编译的代码之后又是怎么执行的及触发依赖回调?</h3>
+## 浏览器拿到webpack编译的代码之后又是怎么执行的及触发依赖回调?
 
 webpack.HotModuleReplacementPlugin提供了一系列check、update、apply方法，帮助我们去执行代码及触发回调
 
-<h3>webpack-dev-middleware扮演什么角色？</h3>
+## webpack-dev-middleware扮演什么角色？
 
 通过源码分析，我们可以知道webpack-dev-middleware帮我们做了如下事情
 
@@ -42,7 +42,7 @@ webpack.HotModuleReplacementPlugin提供了一系列check、update、apply方法
 
 总结起来就是帮助我们监控了文件变化
 
-<h3>webpack-hot-middleware又是扮演什么角色？</h3>
+## webpack-hot-middleware又是扮演什么角色？
 
 使用Server-Sent Events（以下简称 SSE）技术与客户端推送消息
 
@@ -57,11 +57,11 @@ webpack.HotModuleReplacementPlugin提供了一系列check、update、apply方法
 总结起来就是把webpack变化了的模块及重新包生产的hash值传到客户端（也就是浏览器端）
 ，最终替换模块及执行回调
 
-<h3>webpack.HotModuleReplacementPlugin插件的作用又是什么？</h3>
+## webpack.HotModuleReplacementPlugin插件的作用又是什么？
 
 提供module.hot属性，包含一系列下载模块，更新模块，执行回调的方法
 
-<h3>webpack-dev-server与webpack-dev-middleware、webpack-hot-middleware有什么异同?</h3>
+## webpack-dev-server与webpack-dev-middleware、webpack-hot-middleware有什么异同?
 
 webpack-dev-server是一个完整的即提供了node服务又提供了热更新功能包
 
@@ -71,7 +71,7 @@ webpack-hot-middleware主要提供Server-Sent Events（以下简称 SSE）技术
 
 ### webpack-dev-middleware源码分析，只保留关键代码
 
-```
+```js
 index.js
 
 module.exports = function wdm(compiler, opts) {
@@ -150,7 +150,7 @@ module.exports = function ctx(compiler, options) {
 
 ### webpack-hot-middleware源码分析,只留关键代码
 
-```
+```js
 middleware.js 提供sse的服务端代码
 
 function webpackHotMiddleware(compiler, opts) {
@@ -568,7 +568,7 @@ module.exports = function(hash, moduleMap, options) {
 
 ### webpakc-dev-server源码，只保留关键代码
 
-```
+```js
 class Server {
     // 更改webpack配置，如添加websoket的客户端代码、webpack热更新的代码等
     updateCompiler(this.compiler, this.options);
@@ -689,7 +689,7 @@ function startDevServer(config, options) {
 
 只需要将hot || hotOnly属性设置为true即可，其它任何东西都不需要设置
 
-```
+```js
 webpack.config.js
 
 module.exports = {
@@ -717,7 +717,7 @@ module.exports = {
 
 ### webpack-dev-middleware + webpack-hot-middleware的例子
 
-```
+```js
 webpack.config.js
 
 module.exports = {
@@ -767,7 +767,8 @@ app.listen(3001, function (err) {
 })
 ```
 
-总结：不论是webpack-dev-server还是webpack-dev-middleware + webpack-hot-middleware的组合，都是利用webpack.wacth来编译文件及检测webpack文件变化，然后给浏览器注入webpack热更新的js代码，以及与服务端通信的客户端代码来最终实现代码的热更新，形式在变，但是思路不变
+## 总结
+不论是webpack-dev-server还是webpack-dev-middleware + webpack-hot-middleware的组合，都是利用webpack.wacth来编译文件及检测webpack文件变化，然后给浏览器注入webpack热更新的js代码，以及与服务端通信的客户端代码来最终实现代码的热更新，形式在变，但是思路不变
 
 具体例子可参考[webpack-tiny-server](https://github.com/willson-wang/webpack-tiny-server)
 

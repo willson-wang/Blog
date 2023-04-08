@@ -3,7 +3,7 @@
   date: 2018-03-01T09:00:55Z
   lastmod: 2018-03-01T09:01:46Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "拷贝"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

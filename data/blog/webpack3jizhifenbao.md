@@ -3,7 +3,7 @@
   date: 2019-11-10T13:25:57Z
   lastmod: 2019-11-17T01:45:03Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "webpack", "webpack3", "分包"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/webpack3.jpeg']
@@ -14,17 +14,17 @@
 
 在理解分包之前，一定要先理解webpack中几个重要的概念；
 
-<h3>怎样区分chunk、bundle及module</h3>
+## 怎样区分chunk、bundle及module
 
 - module: 每个文件就是一个模块
 - bundle: webpack最终输出的文件
 - chunk: webpack内部处理过程中的代码块，一个chunk可以最终生成一个bundle，多个chunk也可以最终生成一个bundle
 
-<h4>chunk分为三类</h4>
+### chunk分为三类
 
 - Entry chunk - 入口chunk，怎样区分入口chunk内，即包含webpack runtime代码的，如下所示
 
-```
+```js
 entry: {
    a: './src/a.js',
    b: './src/b.js'
@@ -35,7 +35,7 @@ a,b都是entry chunk
 
 - Initial chunk：不包含运行时代码的chunk则认为是initial chunk。initial chunk都是紧随在entry chunk加载之后加载,如webpack3中通过CommonsChunkPlugin抽离的chunk
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: Infinity // 模块必须被3个 入口chunk 共享，Infinity除了vendor的chunk其它的chunk不会被打进来
@@ -44,7 +44,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 - Normal chunk：异步加载or懒加载的模块(如通过require.ensure, or System.import or import()加载的模块)，就是普通chunk；
 
-```
+```js
 require.ensure(['./c'], function(c) {
         console.log('c', c)
 }, function () {}, 'c')
@@ -52,7 +52,7 @@ require.ensure(['./c'], function(c) {
 
 注意Normal chunk与Initial chunk唯一的区别方式就是加载方式，所有通过懒加载or异步加载的都认为是Normal chunk，其它非entry chunk的都是Initial chunk
 
-<h3>怎样区分hash、chunkhash、contenthash</h3>
+## 怎样区分hash、chunkhash、contenthash
 
 - hash: 在 webpack 一次构建中会产生一个 compilation 对象，该 hash 值是对 compilation 内所有的内容计算而来的
 
@@ -62,7 +62,7 @@ require.ensure(['./c'], function(c) {
 
 所以从描述来看，chunkhash应该作为我们持久化缓存用于生成文件名的参数
 
-<h3>怎么看待分包这个问题</h3>
+## 怎么看待分包这个问题
 
 我们为什么要进行分包
 
@@ -79,7 +79,7 @@ require.ensure(['./c'], function(c) {
 webpack3.x版本，我们需要借助CommonsChunkPlugin插件来实现，在进行具体的分包之前，先来详细了解CommonsChunkPlugin插件每个参数的含义，只有理解了每个参数的具体含义，才能够结合自己的项目进行具体的分包，要不然又是从网上copy一段配置项；
 
 我们先看下有哪些参数
-```
+```js
 {
   name: string, // or
   names: string[]
@@ -104,7 +104,7 @@ webpack3.x版本，我们需要借助CommonsChunkPlugin插件来实现，在进�
 
 以一个具体的例子为例,共8个js文件
 
-```
+```js
 a.js  作为入口文件
 
 import './assets/a.css'
@@ -125,7 +125,7 @@ document.getElementById('btn1').addEventListener('click', function () {
 console.warn('a.js', a, _, react, reactDom)
 ```
 
-```
+```js
 b.js 作为入口文件
 import './assets/b.css'
 import { b } from './common'
@@ -143,7 +143,7 @@ document.getElementById('btn2').addEventListener('click', function () {
 console.warn('b.js', b, _, react, reactDom)
 ```
 
-```
+```js
 c.js 在a.js中通过异步引入
 import _ from 'lodash'
 
@@ -160,7 +160,7 @@ require.ensure([], function(require) {
 console.log('c qs', common2, _)
 ```
 
-```
+```js
 d.js 在b.js中通过异步引入
 import qs from 'qs'
 import { common2 } from './common2'
@@ -168,7 +168,7 @@ import { common2 } from './common2'
 console.log('d qs', qs, common2)
 ```
 
-```
+```js
 f.js 在c.js中异步引入
 import _ from 'lodash'
 import { common2 } from './common2'
@@ -177,7 +177,7 @@ import qs from 'qs'
 console.log('f', _, common2, qs)
 ```
 
-```
+```js
 g.js 在c.js中异步引入
 import _ from 'lodash'
 import { common2 } from './common2'
@@ -186,7 +186,7 @@ import qs from 'qs'
 console.log('g', _, common2, qs)
 ```
 
-```
+```js
 common.js 在a.js及b.js引入
 import './assets/common.css'
 
@@ -194,7 +194,7 @@ export const a = 'a00000'
 export const b = 'b00000'
 ```
 
-```
+```js
 common2.js 在f.js、g.js中引入
 export const common2 = 'common2'
 ```
@@ -205,7 +205,7 @@ export const common2 = 'common2'
 ![image](https://user-images.githubusercontent.com/20950813/68989421-944b7d00-0881-11ea-8d84-03644b3b6174.png)
 
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
       name: 'pageA'
 })
@@ -217,7 +217,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 pageB.js包的大小明显减少，为什么？我们在继续看下
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'pageA',
             chunks: ['pageA', 'pageB'],
@@ -233,7 +233,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们在看,把name改成names: ['pageA']
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['pageA'],
             chunks: ['pageA', 'pageB'],
@@ -256,7 +256,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们在把name换个不存在的chunk名来验证我们的推断
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['test'],
             chunks: ['pageA', 'pageB'],
@@ -272,7 +272,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们把minChunks换成函数，及在webpack CommonsChunkPlugin插件中输入targeChunk及affectedChunks
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['test'],
             chunks: ['pageA', 'pageB'],
@@ -296,7 +296,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们先将children设置为true，deepChildren设置为false
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['test'],
             chunks: ['pageA', 'pageB'],
@@ -315,7 +315,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们去掉chunks
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['test'],
             children: true,
@@ -335,7 +335,7 @@ test chunk没有生成、且没有被选中的chunks，所以自然不会生成t
 
 我们修改names将test改成pageA
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['pageA'],
             children: true,
@@ -361,7 +361,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们在看下另外一个参数deepChildren，将deepChildren设置为true，children设置为false
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['pageA'],
             children: false,
@@ -383,7 +383,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们在把children，及deepChildren同时设置为true
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['pageA'],
             children: true,
@@ -419,7 +419,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 调整c.js，引入qs依赖
 
-```
+```js
 import _ from 'lodash'
 import qs from 'qs'
 
@@ -458,7 +458,7 @@ console.log('c qs', common2, _)
 
 我们继续看async参数
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['pageA'],
             children: true,
@@ -479,7 +479,7 @@ new webpack.optimize.CommonsChunkPlugin({
 生成了一个新的async-vendor chunk，这个chunk的内容是从pageA chunk下的所有子chunk中抽出来的公共模块
 
 将async参数的值该为true
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['pageA'],
             children: true,
@@ -501,7 +501,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们在去掉names参数
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             children: true,
             deepChildren: true,
@@ -527,7 +527,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 我们参照[基于 webpack 的持久化缓存方案](https://github.com/pigcan/blog/issues/9)来进行分包处理
 
-<h4>两个思路</h4>
+### 两个思路
 
 思路1: 针对异步chunk，提取出async-vendor及async-common两个异步公共chunk，然后针对入口chunk，提取非dll中的node_modules下的chunk，然后再是common chunk，最后runtime chunk
 
@@ -537,7 +537,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 简单展示下配置项
 
-```
+```js
 entry: {
         app: [path.join(__dirname, 'src/app.js')],
         app_agency: [path.join(__dirname, 'src/app_agency.js')]
@@ -557,7 +557,7 @@ entry: {
 
 第一步
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             async: 'asycn-vendor',
             children: true,
@@ -581,7 +581,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第二步，把异步chunk中公共的业务代码，提取到async-common chunk中
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             async: 'asycn-common',
             children: true,
@@ -606,7 +606,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第三步，针的enrty chunk 提取rest-vendor，因为实际项目中结合了dll
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'rest-vendor',
             minChunks: function (module, count) {
@@ -628,7 +628,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第四步，针的enrty chunk 提取common chunk
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'common',
             chunks: ['app', 'app_agency'],
@@ -646,7 +646,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第五步，针对entry chunk提取runtime chunk
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'runtime'
 }),
@@ -663,7 +663,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第一步，把异步chunk中node_module下，且count>=2的模块提取到entry chunk中
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             names: ['app', 'app_agency'],
             children: true,
@@ -688,7 +688,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第二步，把异步chunk中公共的业务代码，提取到async-common chunk中
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             async: 'asycn-common',
             children: true,
@@ -712,7 +712,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第三步，针的enrty chunk 提取rest-vendor，因为实际项目中结合了dll
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'rest-vendor',
             minChunks: function (module, count) {
@@ -734,7 +734,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第四步，针的enrty chunk 提取common chunk
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'common',
             chunks: ['app', 'app_agency'],
@@ -752,7 +752,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 第五步，针对entry chunk提取runtime chunk
 
-```
+```js
 new webpack.optimize.CommonsChunkPlugin({
             name: 'runtime'
 }),
@@ -765,9 +765,9 @@ new webpack.optimize.CommonsChunkPlugin({
 1. 所有包的大小为18.27M（未压缩），总文件大小减少了78%
 2. 提取了runtime这个chunk，包含了webpack的runtime code
 
-<h4>然后我们通过chrome的performance来对比下两种思路下，首页js加载的时常，已三次为例</h4>
+### 然后我们通过chrome的performance来对比下两种思路下，首页js加载的时常，已三次为例
 
-<h4>思路1</h4>
+### 思路1
 
 ![image](https://user-images.githubusercontent.com/20950813/68991689-69baed80-089c-11ea-9847-51868f665c55.png)
 
@@ -775,7 +775,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 ![image](https://user-images.githubusercontent.com/20950813/68991694-75a6af80-089c-11ea-9c10-674a68b65ec5.png)
 
-<h4>思路2</h4>
+### 思路2
 
 ![image](https://user-images.githubusercontent.com/20950813/68991700-7b9c9080-089c-11ea-8d77-88f95c436451.png)
 
@@ -785,7 +785,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 从图片上可以看出两个思路其实没有特别大的差异，所以还是需要根据自己的项目来选择合适的分包策略；
 
-<h4>总结</h4>
+## 总结
 
 通过上述的步骤，我们清楚的知道CommonsChunkPlugin插件每个参数的作用，也学习了一个分包的参考思路，至于具体的项目中，我们只需要根据缓存策略，然后在根据自己具体的项目去决定是否需要分包，分几次包，最终实现最有利的分包。
 

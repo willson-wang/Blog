@@ -1,26 +1,26 @@
 ---
-  title: 剖析vue-router内部运行流程
+  title: vue-router源码分析
   date: 2020-10-02T08:43:50Z
   lastmod: 2020-10-02T08:48:33Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "vue-router", "源码"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/vue-router.png']
   bibliography: references-data.bib
 ---
 
-### 全局概览
+## 全局概览
 
 这里会借助下面这张内部流程图，先有个大致印象，然后后面在逐个进行分析；vue-router 3.1.2
 
 ![image](https://user-images.githubusercontent.com/20950813/94904642-32fabf80-04ce-11eb-92f2-c1a68e5850f6.png)
 
-### VueRouter实例化
+## VueRouter实例化
 
 在得到VueRouter实例对象的时候我们可以传入需要的routes参数，目的是得到一个路由映射关系对象，可以根据path or name快速找到route对应的record记录;也可以传入mode参数，选择路由方式
 
-```
+```js
 const Foo = { template: '<div>foo</div>' }
 const Bar = { template: '<div>bar</div>' }
 
@@ -35,7 +35,7 @@ const router = new VueRoutes({
 })
 ```
 
-```
+```js
 function addRouteRecord(pathList, pathMap, nameMap, route) {
     const record: RouteRecord = {
         path: normalizedPath,
@@ -95,9 +95,9 @@ class VueRoutes {
 
 我们通过vue Router传入routes的时候，会根据routes内部会维护一份路由的映射关系，pathList、pathMap、nameMap对象，key为path or name 值为record;record会最终当成参数传入的route对象的matched属性内，用于router-view内渲染对应组件
 
-### Vue.mixin内给根组件设置_router属性与_route属性
+## Vue.mixin内给根组件设置_router属性与_route属性
 
-```
+```js
 Vue.mixin({
     beforeCreate () {
         // 判断是不是根组件，根组件上添加_router、_route属性，并将_route设置为响应式，可以做到_route更新的时候，能够响应式更新视图，同时调用init方法
@@ -127,9 +127,9 @@ Vue.component('RouterLink', Link)
 
 通过直接在Vue.prototype上添加$router、$route属性，保证每个vue组件可以通过this.$router及this.$route属性访问路由router对象与route对象；然后将_route属性设置为响应式属性，保证_route属性变化的时候，视图能够更新
 
-### 初始化跳转流程
+## 初始化跳转流程
 
-```
+```js
 class VueRoutes {
     constructor(options) {
         this.matcher = createMatcher(options.routes || [], this)
@@ -233,9 +233,9 @@ init内通过history.transitionTo(history.getCurrentLocation())进行初始化�
 获取到route对象，之后调用confirmTransition，通过比对route与this.current是否相同，如果相同则abort取消跳转；不相同则调用成功回调，然后执行updateRoute(route)方法，更新this.current及调用this.cb;this.cb内最终会执行app._route = route赋值操作，触发响应式更新
 
 
-### router.push or router.replace内部执行流程
+## router.push or router.replace内部执行流程
 
-```
+```js
 class VueRouter {
     push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
         if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
@@ -338,11 +338,11 @@ hash模式下,如果不支持pushState，则使用location.hash、location.repla
 并且我们可以从上面看到，HashHistory、HashHistory内的push、replace方法都是用的是this.transitionTo来进行确认跳转，跳转成功之后，会调用updateRoute，然后更新app._route = route，最终触发根组件的响应式更新
 
 
-### 浏览器前进后退怎么触发视图更新
+## 浏览器前进后退怎么触发视图更新
 
 history模式下,因为popstate事件，无法监听pushState、replaceState触发的跳转；所以我们直接在HTML5History()构造函数初始化的时候，直接注册popstate事件监听函数；监听回调函数内又通过获取更新后的location，然后通过this.transitionTo来进行导航，最终更新_route属性，从而触发视图更新
 
-```
+```js
 class HTML5History extends History {
     constructor (router: Router, base: ?string) {
         const initLocation = getLocation(this.base)
@@ -362,7 +362,7 @@ class HTML5History extends History {
 
 hash 模式下,定义了setupListeners原型方法，该方法在init的时候会被调用；因为hashChange事件，能够监听到location.hash、location.replace触发的更新，所以没有在HashHistory构造函数执行的时候去过早的设置监听，而是init内的首次跳转成功or失败的回调内在去调用setupListeners设置监听；监听函数内又通过获取更新后的location，然后通过this.transitionTo来进行导航，最终更新_route属性，从而触发视图更新
 
-```
+```js
 class VueRouter {
     init() {
         if (history instanceof HTML5History) {
@@ -403,11 +403,11 @@ class HashHistory extends History {
 
 注意hash模式下，且浏览器不支持pushState方法，那么我们在通过push、replace方法去实现hash跳转成功的时候，必然会再次触发hashChange事件；那么是怎么做到避免触发第二次跳转的呢？原因就在confirmTransition方法内，对isSameRoute的判断，因为第二次跳转匹配到的route与this.current存的上次route值，是相同的，所以取消了第二次跳转
 
-### 路由钩子的执行机制与顺序
+## 路由钩子的执行机制与顺序
 
 全局路由钩子
 
-```
+```js
 router.beforeEach((to, from, next) => {
   // ...
 })
@@ -423,7 +423,7 @@ router.afterEach((to, from) => {
 
 路由独享的钩子
 
-```
+```js
 const router = new VueRouter({
     routes: [
         {
@@ -439,7 +439,7 @@ const router = new VueRouter({
 
 组件路由钩子
 
-```
+```js
 const Foo = {
     template: `...`,
     beforeRouteEnter (to, from, next) {
@@ -460,7 +460,7 @@ const Foo = {
 }
 ```
 
-```
+```js
 
 function registerHook (list: Array<any>, fn: Function): Function {
     list.push(fn)
@@ -631,9 +631,9 @@ function runQueue (queue: Array<?NavigationGuard>, fn: Function, cb: Function) {
 11. 触发 DOM 更新。
 12. 调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
 
-### addRoutes动态添加路由规则
+## addRoutes动态添加路由规则
 
-```
+```js
 class VueRouter {
     constructor (options: RouterOptions = {}) {
         this.matcher = createMatcher(options.routes || [], this)
@@ -669,9 +669,9 @@ function createMatcher(routes, router) {
 
 我们可以通过addRoutes向我们的应用动态添加路由规则，然后我们就可以动态匹配页面及组件
 
-### route-view渲染组件
+## route-view渲染组件
 
-```
+```js
 export default {
     name: 'RouterView',
     functional: true,
@@ -747,7 +747,7 @@ export default {
 
 RouterView作为一个函数式组件，即无状态 (没有响应式数据)，也没有实例 (没有 this 上下文)，第二个参数提供上下文；通过获取route.matched[depth]属性内的组件，最终调用 h(component, data, children)来渲染对应的ui组件
 
-### 在看全局
+## 在看全局
 
 在看这张图，是不是清楚了vue-router内部的运行机制了；简而言之vue-router；分为两个部分，第一部分history部分，第二个部分与vue结合部分
 

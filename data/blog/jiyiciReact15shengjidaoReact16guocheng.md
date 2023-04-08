@@ -3,7 +3,7 @@
   date: 2019-11-24T07:10:53Z
   lastmod: 2020-05-23T01:46:55Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "react"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/react.png']

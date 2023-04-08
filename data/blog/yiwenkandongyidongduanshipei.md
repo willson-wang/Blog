@@ -3,7 +3,7 @@
   date: 2020-06-25T06:29:58Z
   lastmod: 2023-03-26T09:31:56Z
   summary: 
-  tags: ["CSS"]
+  tags: ["CSS", "移动端", "适配", "1px"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/css.png']
@@ -14,7 +14,7 @@
 
 那么我们想过Flexible方案能够实现移动端适配的原理是什么？我们先看下代码，以0.3.2版本为例,仅保留关键代码
 
-```
+```js
 if (!dpr && !scale) {
     var isAndroid = win.navigator.appVersion.match(/android/gi);
     var isIPhone = win.navigator.appVersion.match(/iphone/gi);
@@ -114,7 +114,7 @@ refreshRem();
 
 为了解决上面的疑惑，让我们了解下移动端布局的一些历史及一些专业名词
 
-<h3>关于viewport</h3>
+## 关于viewport
 
 移动端刚开始的时候是没有专门针对移动端适配这一说法的，都是直接在手机上打开pc端的站点，那么导致浏览器上查看的时候就有左右滚动条，且需要我们自己手动去缩放屏幕才能够看清内容，在移动端流行之后，这样肯定不行，需要针对移动端进行适配，就出现了viewport，适口的概念；
 
@@ -145,7 +145,7 @@ ideal viewport是最适合移动设备的viewport，ideal viewport的宽度等�
 
 以iphone5为例，ideal viewport的宽度是320px，如果设置initial-scal=1.0，则ideal viewport还是320，如果ideal viewport=2，则ideal viewport变成160，如果ideal viewport=0.5，则ideal viewport变成640
 
-<h3>关于retina屏</h3>
+## 关于retina屏
 
 在pc端布局的时候我们写100px,那么在屏幕上展示的时候往往对应着100个物理像素，所以我们一般认为css中的像素就是对应着设备的物理像素，其实不然的，pc端也不尽是这样，对于快速发展的移动端来说就更不尽然了，早期的移动端一般都是低清屏，也就是一个css像素对应一个设备像素，但是随着iphone4开始，苹果公司便推出了所谓的Retina屏，分辨率提高了一倍，变成640x960，但屏幕尺寸却没变化，这就意味着同样大小的屏幕上，像素却多了一倍，这时，一个css像素是等于两个物理像素的，之后安卓设备上的一个css像素相当于多少个屏幕物理像素，也因设备的不同而不同，没有一个定论
 
@@ -155,7 +155,7 @@ ideal viewport是最适合移动设备的viewport，ideal viewport的宽度等�
 
 这种场景下1px的边框会占用2px的物理像素来展示，导致边框变粗，这个也就是移动端布局常说的1px边框问题
 
-<h3>关于等比缩放</h3>
+## 关于等比缩放
 
 加入在html header内加入如下meta标签下，得到ideal viewport
 ```
@@ -234,7 +234,7 @@ document.documentElement.style.fontSize = document.documentElement.clientWidth /
 ```
 所以我们可以知道通过rem可以达到等比缩放的效果
 
-<h3>关于1px</h3>
+## 关于1px
 
 通过上面的等比缩放，我们已经知道，通过rem已经可以适配不同的屏幕了，但是我们1px的问题还没解决，就是在高清屏下，1px会用2个物理像素来进行展示，到时1px变粗，那么怎么解决呢？
 
@@ -313,7 +313,7 @@ document.documentElement.style.fontSize = document.documentElement.clientWidth /
 
 当然这只是其中的一种解决1px的方式，另外还有其它很多方法解决1px的问题，详情了解[再谈Retina下1px的解决方案](https://juejin.im/entry/5aa0aa056fb9a028be358ff4)
 
-<h3>关于一倍图、二倍图、三倍图</h3>
+## 关于一倍图、二倍图、三倍图
 
 从前面我们已经知道png、jpg等格式的图片时位图，而位图根矢量图的区别可以参考[位图和矢量图区别](https://www.cnblogs.com/areliang/archive/2006/04/29/388769.html)
 
@@ -345,7 +345,7 @@ document.documentElement.style.fontSize = document.documentElement.clientWidth /
 
 所以我们需要根据dpr来选择不同的倍图来进行展示，尽量保证图片不失真，当然还有折中方案，就是不根据dpr来进行判断，直接使用二倍图
 
-<h3>了解来了上面这些内容之后，在回过头看前面的的问题</h3>
+## 了解来了上面这些内容之后，在回过头看前面的的问题
 
 <b>为什么需要判断iphone？</b>
 
@@ -375,7 +375,7 @@ document.documentElement.style.fontSize = document.documentElement.clientWidth /
 
 因为通过添加meta标签，设置ideal viewpor，通过rem实现等比缩放，所以已经基本满足移动端的适配了，剩下只需要考虑1px边框问题及不同倍图图片问题
 
-<h3>关于vw、vh</h3>
+## 关于vw、vh
 
 vw、vh是css中的长度单位，更具体点就是视口的长度单位
 
@@ -421,7 +421,7 @@ vw、vh是css中的长度单位，更具体点就是视口的长度单位
 
 注意就算使用vw、vh单位进行布局，还是会存在1px及img失真问题
 
-<h3>总结</h3>
+## 总结
 
 1. 通过meta标签实现ideal viewport
 2. 通过rem、vw、vh css长度单位实现等比缩放

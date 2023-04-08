@@ -3,14 +3,14 @@
   date: 2019-08-14T13:53:32Z
   lastmod: 2023-03-26T09:24:25Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "polyfill", "core-js"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/polyfill.jpeg']
   bibliography: references-data.bib
 ---
 
-# 目录
+## 目录
 
 1. 什么是polyfill
 2. ECMASCRIPT近几年发布了哪些版本及新的api，兼容性总结
@@ -18,7 +18,7 @@
 4. 如何使用browserslist
 5. 参考链接
 
-### 什么是polyfill
+## 什么是polyfill
 
 先看张图
 
@@ -31,13 +31,13 @@ polyfill的英文意思是填充工具，意义就是兜底的东西；为什么
 ![image](https://user-images.githubusercontent.com/20950813/67930585-09b91b80-fbfb-11e9-9e8e-876e04450f8a.png)
 
 
-### ECMASCRIPT近几年发布了哪些版本及新的api，兼容性总结
+## ECMASCRIPT近几年发布了哪些版本及新的api，兼容性总结
 
-#### ECMASCRIPT 5 简称es5，首版发布于2009年，2012年发布了5.1
+### ECMASCRIPT 5 简称es5，首版发布于2009年，2012年发布了5.1
 
 新增的api如下所示，列出常用的方法
 
-```
+```js
 Object
   .create(proto | null, descriptors?)    -> object
   .getPrototypeOf(object)                -> proto | null
@@ -86,7 +86,7 @@ Date
 
 Example
 
-```
+```js
 const person = {
     printIntroduction: function () {
       console.log(`My name is ${this.name}. Am I human? age ${this.age}`);
@@ -102,7 +102,7 @@ const me = Object.create(person, {
 });
 ```
 
-```
+```js
 const prototype1 = {};
 const object1 = Object.create(prototype1);
 
@@ -111,7 +111,7 @@ console.log(Object.getPrototypeOf(object1) === prototype1); // true
 console.log(Object.getPrototypeOf(Object.prototype)); // null
 ```
 
-```
+```js
 var o = {}; // 创建一个新对象
 
 // 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象
@@ -125,7 +125,7 @@ Object.defineProperty(o, "a", {
 console.log(o.a)
 ```
 
-```
+```js
 var obj = {};
 // 直接在一个对象上定义多个新的属性或修改现有属性，并返回该对象。definePropertie一次只能定义一个属性
 Object.defineProperties(obj, {
@@ -142,7 +142,7 @@ Object.defineProperties(obj, {
 console.log(obj.property1, obj.property2)
 ```
 
-```
+```js
 var o, d;
 
 o = { get foo() { return 17; } };
@@ -182,7 +182,7 @@ f = Object.getOwnPropertyDescriptor(o, "age");
 // f undefined
 ```
 
-```
+```js
 var obj = Object.create({age: 18})
 
 obj.name = 'jack'
@@ -197,7 +197,7 @@ Object.defineProperty(obj, 'gender', {
 console.log(Object.getOwnPropertyNames(obj)) // ["name", "gender"]
 ```
 
-```
+```js
 var obj = Object.create({age: 18})
 
 obj.name = 'jack'
@@ -212,7 +212,7 @@ Object.defineProperty(obj, 'gender', {
 console.log(Object.keys(obj)) // ["name"]
 ```
 
-```
+```js
 var obj = Object.create({age: 18})
 
 obj.name = 'jack'
@@ -235,7 +235,7 @@ obj.getName = function () {}
 console.log(obj.getName) // undefined
 ```
 
-```
+```js
 var obj = Object.create({age: 18})
 
 obj.name = 'jack'
@@ -271,7 +271,7 @@ obj.info.name = 'mike'
 console.log(obj.info.name) // mike
 ```
 
-```
+```js
 var obj = Object.create({age: 18})
 
 obj.name = 'jack'
@@ -301,7 +301,7 @@ obj.info.name = 'mike'
 console.log(obj.info.name) // mike
 ```
 
-```
+```js
 var obj = {name: 'rose'}
 // 判断一个对象是否被密封
 console.log(Object.isSealed(obj)) // false
@@ -309,7 +309,7 @@ Object.seal(obj)
 console.log(Object.isSealed(obj)) // true
 ```
 
-```
+```js
 var obj = {name: 'rose'}
 // // 判断一个对象是否被冻结
 console.log(Object.isFrozen(obj)) // false
@@ -317,7 +317,7 @@ Object.freeze(obj)
 console.log(Object.isFrozen(obj)) // true
 ```
 
-```
+```js
 var obj = {name: 'rose'}
 // 判断一个对象是否可拓展
 console.log(Object.isExtensible(obj)) // true
@@ -325,7 +325,7 @@ Object.preventExtensions(obj)
 console.log(Object.isExtensible(obj)) // false
 ```
 
-```
+```js
 const num = 3.1415926
 
 // 指定小数点后保留的位数，默认为0
@@ -336,7 +336,7 @@ console.log(num.toFixed(3)) // 3.142
 console.log(num.toFixed(4)) // 3.1416
 ```
 
-```
+```js
 const num = 3.1415926
 
 // 指定有效数字位数，默认所有
@@ -357,11 +357,11 @@ node端0.1+
 
 上面的版本都是至少支持90%以上的语法特性，通过上述的兼容性，我们已经能够很好的判断自身所需的兼容性来；如果我们不需要去兼容ie9-及andriod4.4-，ios6-，那我们在使用es5的语法时，是不需要考虑兼容性的；如果我们其中使用来一些es6的语法及api,则需要babel转译及polyfill；
 
-#### ECMASCRIPT 2015 简称es6，首版发布于2015年6月，且后面的ECMASCRIPT标准，每年发布一次，年号命名
+### ECMASCRIPT 2015 简称es6，首版发布于2015年6月，且后面的ECMASCRIPT标准，每年发布一次，年号命名
 
 新增的常用api如下所示
 
-```
+```js
 Object
   .assign(target, ...src)                -> target
   .is(a, b)                              -> bool
@@ -457,7 +457,7 @@ new Set(iterable?)              -> set
 
 Example
 
-```
+```js
 var foo = {q: 1, w: 2, c: {a: 'jack'}}
   , bar = {e: 3, r: 4}
   , baz = {q: 5, y: 6};
@@ -473,7 +473,7 @@ const fo = Object.assign(foo, bar, baz)
 console.log(fo, foo.c === fo.c);
 ```
 
-```
+```js
 // 判断两个值是否是相同的值。
 // 这种相等性判断逻辑和传统的 == 运算不同，== 运算符会对它两边的操作数做隐式类型转换（如果它
 // 们类型不同），然后才进行相等性比较，（所以才会有类似 "" == false 等于 true 的现象），但 
@@ -486,7 +486,7 @@ console.log(Object.is(42, 42));   // => true
 console.log(Object.is(42, '42'), 42 == '42', 42 === '42'); // => false true false
 ```
 
-```
+```js
 function Parent(){}
 function Child(){}
 // 设置一个指定的对象的原型 ( 即, 内部[[Prototype]]属性）到另一个对象或  null
@@ -495,7 +495,7 @@ console.log(new Child instanceof Child);  // => true
 console.log(new Child instanceof Parent); // => true
 ```
 
-```
+```js
 // 从一个类似数组(拥有一个 length 属性和若干索引属性的任意对象)或可迭代对象(可以获取对象中的元素,如 Map和 Set 等)中创建一个新的，浅拷贝的数组实例
 // Array.from(obj, mapFn, thisArg) 就相当于 Array.from(obj).map(mapFn, thisArg)
 Array.from(new Set([1, 2, 3, 2, 1]));      // => [1, 2, 3]
@@ -506,7 +506,7 @@ Array.from('123', function(it){
 });                                        // => [1, 4, 9]
 ```
 
-```
+```js
 // 创建一个具有可变数量参数的新数组实例，而不考虑参数的数量或类型
 Array.of(1);       // => [1]
 Array.of(1, 2, 3); // => [1, 2, 3]
@@ -516,7 +516,7 @@ Array(7);          // [ , , , , , , ]
 Array(1, 2, 3);    // [1, 2, 3]
 ```
 
-```
+```js
 var array = ['a', 'b', 'c'];
 
 for(var val of array)console.log(val);          // => 'a', 'b', 'c'
@@ -528,7 +528,7 @@ for(var [key, val] of array.entries()){
 }
 ```
 
-```
+```js
 function isOdd(val){
   return val % 2;
 }
@@ -538,30 +538,30 @@ function isOdd(val){
 [4, 8, 15, 16, 23, 42].findIndex(isNaN); // => -1
 ```
 
-```
+```js
 Array(5).fill(42); // => [42, 42, 42, 42, 42]
 ```
 
-```
+```js
 [1, 2, 3, 4, 5].copyWithin(0, 3); // => [4, 5, 3, 4, 5]
 ```
 
-```
+```js
 'foobarbaz'.includes('bar');      // => true
 'foobarbaz'.includes('bar', 4);   // => false
 ```
 
-```
+```js
 'foobarbaz'.startsWith('foo');    // => true
 'foobarbaz'.startsWith('bar', 3); // => true
 ```
 
-```
+```js
 'foobarbaz'.endsWith('baz');      // => true
 'foobarbaz'.endsWith('bar', 6);   // => true
 ```
 
-```
+```js
 var a = [1];
 
 var map = new Map([['a', 1], [42, 2]]);
@@ -594,7 +594,7 @@ for(var [key, val] of map.entries()){
 }
 ```
 
-```
+```js
 var set = new Set(['a', 'b', 'a', 'c']);
 set.add('d').add('b').add('e');
 console.log(set.size);        // => 5
@@ -626,18 +626,18 @@ pc端edge12+,ff54+,ch51+,sf10+;
 mobile端ios10+,android5+;
 node端6+
 
-#### ECMASCRIPT 2016 简称es2016，2016年发布的版本
+### ECMASCRIPT 2016 简称es2016，2016年发布的版本
 
 新增的常用api如下所示
 
-```
+```js
 Array
   #includes(var, from?) -> bool
 ```
 
 Example
 
-```
+```js
 [1, 2, 3].includes(2);        // => true
 [1, 2, 3].includes(4);        // => false
 [1, 2, 3].includes(2, 2);     // => false
@@ -648,9 +648,9 @@ Array(1).indexOf(undefined);  // => -1
 Array(1).includes(undefined); // => true
 ```
 
-#### ECMASCRIPT 2017 简称es2017，2017年发布的版本
+### ECMASCRIPT 2017 简称es2017，2017年发布的版本
 
-```
+```js
 Object
   .values(object) -> array
   .entries(object) -> array
@@ -660,16 +660,16 @@ String
   #padEnd(length, fillStr = ' ') -> string
 ```
 
-#### ECMASCRIPT 2018 简称es2018，2018年发布的版本
+### ECMASCRIPT 2018 简称es2018，2018年发布的版本
 
-```
+```js
 Promise
   #finally(onFinally()) -> promise
 ```
 
-#### ECMASCRIPT 2019 简称es2019，2018年发布的版本
+### ECMASCRIPT 2019 简称es2019，2018年发布的版本
 
-```
+```js
 String
   #trimLeft()  -> string
   #trimRight() -> string
@@ -677,11 +677,11 @@ String
   #trimEnd()   -> string
 ```
 
-### core-js是怎么去实现polyfill的
+## core-js是怎么去实现polyfill的
 
 core-js2.x常用的引入方式如下所示
 
-```
+```js
 // 全局polyfill
 require('core-js');
 // 没有全局污染的polyfill
@@ -700,7 +700,7 @@ var findIndex = require('core-js/library/fn/array/find-index');
 
 全局polyfill与没有全局污染的polyfill的区别，有污染的指的是直接在window上添加静态方法or属性，在Array等构造函数上添加静态方法or原型方法，如findIndex方法，会直接添加到Array.prototype的原型上，这就直接污染了Array.prototype；而无污染指的是，不会直接在window上添加静态方法or属性，在Array等构造函数上添加静态方法or原型方法，而是放在了core全局变量or直接export该api；所以'core-js/library'引入的就是无污染的polyfill，源码的实现如下所示，已findIndex为例
 
-```
+```js
 有污染
 // modules/es6.array.find-index.js
 
@@ -810,7 +810,7 @@ var $export = function (type, name, source) {
 
 全局polyfill与shim区别，shim仅包含标准方法，而全局polyfill除了包含标准方法还有一些非标准的方法，如非标准方法
 
-```
+```js
 Object
   .isObject(var) -> bool
   .classof(var) -> string
@@ -818,7 +818,7 @@ Object
   .make(proto | null, mixin?) -> object
 ```
 
-### 如何使用browserslist
+## 如何使用browserslist
 
 browserslist用于在不同前端工具之间共享目标浏览器和Node.js版本的配置，如Autoprefixer、babel等；告诉前端工具，当前项目运行的目标浏览器及node版本是，这样工具可以根据目标浏览器及node版本添加对应的css前缀及语法是否需要转化；以babel为例，已模版字符串及async函数为例
 
@@ -830,7 +830,7 @@ async的兼容性
 
 ![image](https://user-images.githubusercontent.com/20950813/63220781-0f3cc300-c1c1-11e9-891c-726dc1089317.png)
 
-```
+```js
 index.js
 
 const name = 'jack';
@@ -839,7 +839,7 @@ async function getList() {}
 
 ```
 
-```
+```js
 .babelrc
 
 {
@@ -860,7 +860,7 @@ async function getList() {}
 
 babel处理后的index.js
 
-```
+```js
 "use strict";
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -895,7 +895,7 @@ function _getList() {
 明显模版字符串及async都做例转化，因为我们的目标浏览器是ie >= 9，node版本是7.0.0；这些目标环境都是不支持模版字符串及async，所以都进行例转化；我们修改下目标参数
 
 已支持async函数的版本为目标环境
-```
+```js
 .babelrc
 
 {
@@ -915,7 +915,7 @@ function _getList() {
 
 babel转化后的index.js
 
-```
+```js
 "use strict";
 
 const name = 'jack';
@@ -926,7 +926,7 @@ async function getList() {}
 明显模版字符串及async都没有做转化，因为我们的目标浏览器是edge >= 15，node版本是7.6.0；这些目标环境都是支持模版字符串及async，所以没有进行例转化；
 
 已支持模版字符串的版本为目标环境
-```
+```js
 .babelrc
 {
     "presets": [
@@ -945,7 +945,7 @@ async function getList() {}
 
 babel转化后的index.js
 
-```
+```js
 "use strict";
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -985,7 +985,7 @@ browserslist的配置方式
 
 1. 在package.json内添加browserslist字段
 
-```
+```json
  "browserslist": [
     "last 1 version",
     "> 1%",
@@ -1005,7 +1005,7 @@ not dead
 
 3. 各个工具中对应的属性，如babel中的targets属性
 
-```
+```js
 {
     "presets": [
         [

@@ -3,7 +3,7 @@
   date: 2018-03-05T06:06:14Z
   lastmod: 2018-07-11T01:51:16Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "angularJs"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

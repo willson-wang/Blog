@@ -3,7 +3,7 @@
   date: 2019-05-23T14:12:29Z
   lastmod: 2023-03-26T09:27:28Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "axios", "源码"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib
@@ -17,17 +17,17 @@
 五. axios有哪些值得借鉴的地方
 六. 总结
 
-### 一、现有ajax请求库及方法的对比
+## 一、现有ajax请求库及方法的对比
 
 ![image](https://user-images.githubusercontent.com/20950813/58420552-27201180-80c0-11e9-81ff-ee7905ab53d9.png)
 
 
 ![image](https://user-images.githubusercontent.com/20950813/58420497-035ccb80-80c0-11e9-94a1-2a28cfdc8f50.png)
 
-### 二、axios常用的使用方式举例
+## 二、axios常用的使用方式举例
 
 第一种方式，axios(config)
-```
+```js
 axios({
   method: 'post',
   url: '/user/12345',
@@ -39,12 +39,12 @@ axios({
 ```
 
 第二种方式，axios(url[, config])，这时会默认为get请求
-```
+```js
 axios('/user/12345');
 ```
 
 第三种方式，axios.get(url[, config])
-```
+```js
 axios.get('/user', {
     params: {
       ID: 12345
@@ -62,7 +62,7 @@ axios.get('/user', {
 ```
 
 第四种方式axios.post(url[,data[, config]])
-```
+```js
 axios.post('/user', {
     firstName: 'Fred',
     lastName: 'Flintstone'
@@ -76,7 +76,7 @@ axios.post('/user', {
 ```
 
 第五种方式axios.request(config)
-```
+```js
 axios.request({
   method: 'get',
   url: 'http://bit.ly/2mTM3nY',
@@ -88,7 +88,7 @@ axios.request({
 ```
 
 创建自定义实例，并添加拦截器
-```
+```js
 // 添加实例默认参数
 const instance = axios.create({
   baseURL: 'https://some-domain.com/api/',
@@ -134,7 +134,7 @@ axios.post('/user', {
   });
 ```
 
-#### 通过使用axios我们可能会有下面几个疑问？
+### 通过使用axios我们可能会有下面几个疑问？
 
 1. 为什么axios可以直接调用，即axios({})
 2. 拦截器是怎么实现的
@@ -146,11 +146,11 @@ axios.post('/user', {
 
 然后让我们带着疑问，去源码内一探究竟；
 
-### 三、axios源码分析
+## 三、axios源码分析
 
 在分析源码之前在回顾一下一些关于XMLHttpRequest的基础知识
 
-#### request header
+### request header
 
 在发送Ajax请求（实质是一个HTTP请求）时，我们可能需要设置一些请求头部信息，比如content-type、connection、cookie、accept-xxx等。xhr提供了setRequestHeader来允许我们修改请求 header，然而我们一般最关注content-type这个请求头属性的值；
 
@@ -172,13 +172,13 @@ axios.post('/user', {
 
 - setRequestHeader可以调用多次，最终的值不会采用覆盖override的方式，而是采用追加append的方式。下面是一个示例代码
 
-```
+```js
 client.setRequestHeader('X-Test', 'one');
 client.setRequestHeader('X-Test', 'two');
 // 最终request header中"X-Test"为: one, two
 ```
 
-#### xhr.responseType
+### xhr.responseType
 
 responseType是xhr level 2新增的属性，用来指定xhr.response的数据类型
 
@@ -192,7 +192,7 @@ responseType是xhr level 2新增的属性，用来指定xhr.response的数据类
 "blob" | Blob对象
 "arrayBuffer" | ArrayBuffer对象
 
-#### xhr.withCredentials与 CORS 什么关系
+### xhr.withCredentials与 CORS 什么关系
 
 我们都知道，在发同域请求时，浏览器会将cookie自动加在request header中。而在发送跨域请求时，cookie并没有自动加在request header中。
 
@@ -200,7 +200,7 @@ responseType是xhr level 2新增的属性，用来指定xhr.response的数据类
 
 所以根本原因是cookies也是一种认证信息，在跨域请求中，client端必须手动设置xhr.withCredentials=true，且server端也必须允许request能携带认证信息（即response header中包含Access-Control-Allow-Credentials:true），这样浏览器才会自动将cookie加在request header中。
 
-#### axios源码目录，以最新的0.19.0-beta.1版本进行分析
+### axios源码目录，以最新的0.19.0-beta.1版本进行分析
 
 ```
 adapters
@@ -257,14 +257,14 @@ utils.js
 
 ```
 
-#### axios的运行简图
+### axios的运行简图
 
 ![image](https://user-images.githubusercontent.com/20950813/58484637-0aa1d900-8195-11e9-8fe7-89884050983d.png)
 
 
-#### 从暴露出的axios的axios.js入口看起，在看axios.js之前需要先看下工具方法utils.js，因为axios.js内有用到这个extend、merge这几个工具方法
+### 从暴露出的axios的axios.js入口看起，在看axios.js之前需要先看下工具方法utils.js，因为axios.js内有用到这个extend、merge这几个工具方法
 
-```
+```js
 // 函数绑定上下文
 function bind(fn, thisArg) {
   return function wrap() {
@@ -361,7 +361,7 @@ function extend(a, b, thisArg) {
 }
 ```
 
-```
+```js
 // 创建axios实例的方法
 function createInstance(defaultConfig) {
   // 调用Axios构造函数创建实例
@@ -405,9 +405,9 @@ axios.isCancel = require('./cancel/isCancel');
 3. 将取消请求相关的方法如CancelToken，添加到axios方法上，便于执行cancel操作
 
 
-#### 再来看下初始化Axios实例时传入的默认参数defaults，都定义在defaults.js内
+### 再来看下初始化Axios实例时传入的默认参数defaults，都定义在defaults.js内
 
-```
+```js
 // 设置请求头'Content-Type'常量
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -515,9 +515,9 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 3. 添加防xsrf攻击的请求头
 4. 校验xhr返回状态码的validateStatus方法
 
-#### 通过new Axios创建了Axios实例，那么看下Axios.js内做了些什么
+### 通过new Axios创建了Axios实例，那么看下Axios.js内做了些什么
 
-```
+```js
 /**
  * 定义Axiose构造函数，需要传入一个Config参数
  */
@@ -614,7 +614,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 ```
 
-#### 看一张示意图
+### 看一张示意图
 ![image](https://user-images.githubusercontent.com/20950813/58381464-eb1d7b80-7fef-11e9-9420-389c02c98a38.png)
 
 #### 小结一下，Axios.js内主要做了哪些事情
@@ -624,9 +624,9 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 3. 在Axios原型上定义了'delete', 'get', 'head', 'options','post', 'put', 'patch'六个方法，允许传入不同的参数个数，也就是我们最开始提到的，为什么会有那么多种写法，里面都是调用的request方法；
 
 
-#### 接着看一下生成拦截器实例的InterceptorManager构造函数，在InterceptorManager.js内
+### 接着看一下生成拦截器实例的InterceptorManager构造函数，在InterceptorManager.js内
 
-```
+```js
 // 定义构造函数，添加handlers一个实例属性
 function InterceptorManager() {
   this.handlers = [];
@@ -671,9 +671,9 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 3. 定义了原型方法eject，允许通过id注销某个注册了的拦截器；
 4. 定义了原型方法forEach，遍历添加的拦截器数组，跳过注销了的拦截器，用在request方法内
 
-#### 然后我们在回过头来看dispatchRequest方法，在dispatchRequest.js内
+### 然后我们在回过头来看dispatchRequest方法，在dispatchRequest.js内
 
-```
+```js
 /**
  *  判断是否执行了cancel操作
  */
@@ -759,9 +759,9 @@ module.exports = function dispatchRequest(config) {
 4. 使用adapter发起请求，成功回调内在通过throwIfCancellationRequested方法判断是否执行了取消cancel操作；Transform response data 返回json数据，并最终返回整个response；失败回掉内则根据isCancel是否取消了，来拼接失败返回的reason对象
 
 
-#### dispatchRequest.js用到了adapter去发起请求，前面adapter属性会根据当前的运行环境去加载不同的适配器，我们已xhr.js为例
+### dispatchRequest.js用到了adapter去发起请求，前面adapter属性会根据当前的运行环境去加载不同的适配器，我们已xhr.js为例
 
-```
+```js
 function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
 
@@ -910,8 +910,8 @@ function xhrAdapter(config) {
 5. 通过config.cancelToken是否有值来判断是否开启来取消请求的功能，通过config.cancelToken也就是CancelToken的promise实例属性的then方法内执行abort操作
 
 
-#### 最后让我们在看下axios内的取消请求是怎么实现的，源码在cancel目录下，主要看CancelToken.js
-```
+### 最后让我们在看下axios内的取消请求是怎么实现的，源码在cancel目录下，主要看CancelToken.js
+```js
 /**
  * 定义一个CancelToken构造函数，该构造函数会有promise，及reason两个属性，一个用于xhr发起前取消请求，一个用于xhr进行的时候取消操作
  */
@@ -972,7 +972,7 @@ CancelToken.source = function source() {
 2. 在cancel函数参数内对reason赋值，并执行实例属性promise的resolve方法；所以执行cancel函数才是执行取消操作；
 3. 取消请求一是通过判断this.reason是否有值来进行判断；另一个是在实例属性promise.then内执行abort操作
 
-```
+```js
 let cancel
 axios({
     method:'get',
@@ -994,7 +994,7 @@ setTimeout(() => {
 }, 0)
 ```
 
-#### 到这里整个axios的内部实现基本已经阅读完毕，我们在回答下最开始的几个疑问
+### 到这里整个axios的内部实现基本已经阅读完毕，我们在回答下最开始的几个疑问
 
 1. 为什么axios可以直接调用，即axios({})
 因为在axios是一个通过createInstance方法创建的函数，axios实际上就是Axios.prototype.request.bind(new Axios)，所以axios可以直接调用
@@ -1011,7 +1011,7 @@ setTimeout(() => {
 5. post请求默认是application/json，如果要发送表单请求该怎么做
 两种方式，1.传入的data参数是URLSearchParams类型，即data参数经过qs.stringgify处理，第二种方式传入`headers: {Content-Type: 'application/x-www-form-urlencoded;charset=utf-8'}`，data参数经过qs.stringgify处理；注意config.headers >> config.headers[config.method] >> config.headers.common
 
-```
+```js
   // Transform request data
   config.data = transformData(
     config.data,
@@ -1036,7 +1036,7 @@ transformResponse：JSON.parse(data)
 什么是CSRF，CSRF（Cross Site Request Forgery, 跨站域请求伪造）是一种网络的攻击方式，它在 2007 年曾被列为互联网 20 大安全隐患之一
 axios就是让你的每个请求都带一个从cookie中拿到的key, 根据浏览器同源策略，假冒的网站是拿不到你cookie中得key的，这样，后台就可以轻松辨别出这个请求是否是用户在假冒网站上的误导输入，从而采取正确的策略；这种方法貌似也有局限性
 
-```
+```js
 var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
         cookies.read(config.xsrfCookieName) :
         undefined;
@@ -1046,11 +1046,11 @@ if (xsrfValue) {
       }
 ```
 
-### 四、通过了解axios源码之后，我们可以做哪些业务场景的优化
+## 四、通过了解axios源码之后，我们可以做哪些业务场景的优化
 
 1. 页面切换时，取消上个页面发出的所有请求，减少无用请求；
 
-```
+```js
 // 第一步收集取消触发器
 let allCancels = []
 const CancelToken = axios.CancelToken;
@@ -1082,7 +1082,7 @@ router.beforeEach((to, from, next) => {
 
 2. 取消重复请求
 
-```
+```js
 // 定义请求数组
 const requestList = []
 const CancelToken = axios.CancelToken
@@ -1123,7 +1123,7 @@ axios.interceptors.response.use(function (response) {
 
 3. 减少不必要的二次封装
 
-```
+```js
 // 多来一层无用的promise封装
 function get(url, params) {
     return new Promise((resolve, reject) => {
@@ -1140,7 +1140,7 @@ function get(url, params) {
 }
 ```
 
-### 五、axios有哪些值得借鉴的地方
+## 五、axios有哪些值得借鉴的地方
 
 1. 模块的划分，简单明了，每个js文件又遵循功能单一原则；
 
@@ -1159,7 +1159,7 @@ axios没有将用于发送请求的dispatchRequest函数视为特殊函数。实
 在取消HTTP请求的逻辑中，axios被设计为使用Promise作为触发器，将resove函数作为参数传递给外部。它不仅可以确保内部逻辑的一致性，还避免最大程度地侵入其他模块。
 
 
-### 六、总结
+## 六、总结
 
 通过细读axios的源码，我们能够学到axios的设计，并了解其模块封装和交互思想；但是看懂了，并不代表自己学会了，所以还是需要自己去多练习，多总结。
 

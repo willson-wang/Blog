@@ -1,9 +1,9 @@
 ---
-  title: lerna管理Monorepo项目实践
+  title: lerna管理Monorepo项目
   date: 2021-07-18T04:13:14Z
   lastmod: 2021-07-18T04:14:44Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "lerna", "monorepo"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/lerna.jpeg']
@@ -66,7 +66,7 @@ yarn global add lerna
 
 ### 初始化项目
 
-```
+```shell
 mkdir lerna-demo
 cd lerna-demo
 
@@ -83,14 +83,14 @@ Fixed/Locked mode，在这种模式下，实际上lerna是把工程当作一个�
 
 方法1-手动创建:
 
-```
+```shell
 mkdir package-a
 cd package-a
 npm init -y
 ```
 
 方法2-使用lerna create方法创建:
-```
+```shell
 lerna create <name> [loc]
 
 lerna create cli-ui
@@ -122,7 +122,7 @@ lerna提供了很多的命令，我们可以通过`lerna --help`查看，但根�
 
 2、命令行添加
 
-```
+```shell
 lerna add <package>[@version] [--dev] # 命令签名
 
 # 例如
@@ -135,7 +135,7 @@ lerna add @babel/core # 将 @babel/core 安装到所有模块
 
 #### 项目卸载依赖
 
-```
+```shell
 lerna exec -- <command> [..args] # 在每个 package 中执行任意命令，用波折号(--)分割命令语句
 
 lerna exec --scope=npm-list  yarn remove listr # 将 npm-list 包下的 listr 卸载
@@ -146,7 +146,7 @@ lerna exec -- yarn remove listr # 将所有包下的 listr 卸载
 
 执行lerna bootstrap用于创建软链包与安装依赖包
 
-```
+```shell
 lerna bootstrap
 ```
 
@@ -159,7 +159,7 @@ lerna bootstrap
 
 #### 显示packages下的各个package的version及依赖关系
 
-```
+```shell
 lerna ls
 lerna ls --json
 
@@ -192,7 +192,7 @@ lerna ls --json
 lerna success found 4 packages
 ```
 
-```
+```shell
 lerna ls --graph // 查看内部依赖
 
 {
@@ -211,7 +211,7 @@ lerna ls --graph // 查看内部依赖
 ```
 
 
-```
+```shell
 lerna ls --graph --all // 查看所有依赖
 
 {
@@ -240,12 +240,12 @@ lerna ls --graph --all // 查看所有依赖
 
 #### 清理packages中每个package的node_modules
 
-```
+```shell
 lerna clean
 ```
 
 #### 执行packages中每个pacakge内的scripts
-```
+```shell
 lerna run <script> -- [..args] # 在所有包下运行指定
 
 # 例如
@@ -260,7 +260,7 @@ lerna run --scope package-a test # 运行 package-a 模块下的 test
 
 lerna version 生成新的唯一版本号
 
-```
+```shell
 lerna version 1.0.1 # 显示指定
 
 lerna version patch # 语义关键字
@@ -298,7 +298,7 @@ lerna version --conventional-prerelease --preid beta 生成beta版本
 
 2. 计算完成之后，会在做一层统一更新，先从包的版本内，获取最高的版本号，然后将其它包的版本号都更改成最高的这个版本号
 
-```
+```js
 setGlobalVersionCeiling(versions) {
   let highestVersion = this.project.version;
 
@@ -346,7 +346,7 @@ bump: preminor => lerna version preminor
 
 
 0.x.x升级主版本的时候，不会成功，会变成小版本，只有包的主版本本身大于1的时候才会直接升主版本
-```
+```js
 if (semver.major(pkg.version) === 0) {
   if (releaseType === "major") {
     releaseType = "minor";
@@ -366,7 +366,7 @@ lerna version内部流程可以参考总结的脑图
 
 #### 发布npm包
 
-```
+```shell
 lerna publish
 
 // 强制重新发布
@@ -380,7 +380,7 @@ lerna publish from-package
 ```
 
 lerna publish --conventional-commits false 成功发布的一个例子
-```
+```shell
 ➜  lerna-demo git:(main) lerna publish
 info cli using local version of lerna
 lerna notice cli v4.0.0
@@ -499,7 +499,7 @@ lerna publish内部流程可以参考总结的脑图
 ## lerna.json字段解析
 
 lerna.json解析
-```
+```json
 {
   "version": "independent",
   "npmClient": "yarn",
@@ -572,7 +572,7 @@ command.version.changelogPreset：修改生成changelog文件的预设
  
 ## 生成changeLog
 
-```
+```json
 {
   "version": "independent",
   "npmClient": "yarn",
@@ -601,7 +601,7 @@ command.version.changelogPreset：修改生成changelog文件的预设
 - @commitlint/config-angular  // angular的共享规则
 
 这里我们选择
-```
+```js
 module.exports = {
   // 继承默认配置
   extends: [
@@ -623,7 +623,7 @@ lerna-changelog 作用结合pr来生成changelog，具体可以参考下面三�
 
 在仓库改造成monorepo之前的commit怎么生成对应的changLog
 
-```
+```shell
 yarn add conventional-changelog-cli -D -W
 
 // fixed 模式
@@ -654,7 +654,7 @@ conventional-recommended-bump 自动计算得出包的新版本，而计算得�
 
 conventional-changelog-conventionalcommits whatBump源码
 
-```
+```js
 whatBump: (commits) => {
   let level = 2
   let breakings = 0
@@ -738,7 +738,7 @@ projects/
 
 project1/package.json:
 
-```
+```json
 {
   "name": "project1",
   "version": "1.0.0",
@@ -748,7 +748,7 @@ project1/package.json:
 }
 ```
 
-```
+```json
 {
   "name": "project2",
   "version": "1.0.0",
@@ -779,7 +779,7 @@ project1/package.json:
 使用 Yarn Workspace 之后，上述问题都能得到很好的解决。而且这是 Yarn 内置的功能，并不需要安装什么其他的包，只需要简单的在 projects 目录（Yarn 称之为 workspace-root）下增加如下内容的 package.json 文件即可。
 
 projects/package.json：
-```
+```json
 {
   "private": true,
   "workspaces": ["project1", "project2"] // 也可以使用通配符设置为 ["project*"]
@@ -788,7 +788,7 @@ projects/package.json：
 
 在 workspace-root 目录下执行 yarn install：
 
-```
+```shell
 $ cd projects
 $ rm -r project1/node_modules
 $ rm -r project2/node_modules
@@ -832,15 +832,15 @@ workspaces-experimental false
 
 ### Yarn Workspace 命令
 
-```
+```shell
 yarn workspace <workspace_name> <command>
 
 yarn workspace project1 add vue --dev 《 往 project1 添加 vue 开发依赖
 yarn workspace project1 remove vue    《 从 project1 移除 vue 依赖
 ```
 
-### yarn workspaces命令
-```
+
+```shell
 yarn workspaces <command>
 
 yarn workspaces run <command>
@@ -849,7 +849,7 @@ yarn workspaces info [--json]
 
 projects/package.json:
 
-```
+```json
 {
   "scripts": {
     "build": "yarn workspaces run build"
@@ -859,7 +859,7 @@ projects/package.json:
 
 project1|project2/package.json:
 
-```
+```json
 {
   "scripts": {
     "build": "rollup -i index.js -f esm -o dist/bundle.js"
@@ -867,13 +867,13 @@ project1|project2/package.json:
 }
 ```
 
-### lerna中开启workspace
+## lerna中开启workspace
 
 lerna默认事没有开启workspace的，也就是packages/xxx目录下的每个包会存在一份node_modules，也就是同一份依赖会存在每个node_modules下
 
 开启workspace
 
-```
+```json
 {
   "version": "independent",
   "npmClient": "yarn",
@@ -881,7 +881,7 @@ lerna默认事没有开启workspace的，也就是packages/xxx目录下的每个
 }
 ```
 
-```
+```json
 {
   "private": true, // 为true，workspaces才会生效
     "workspaces": [
@@ -904,11 +904,11 @@ package-b  "react-router": "4",
 workspace不能嵌套（只能有一个根workspace）
 workspace采用的是向上遍历，所以workspace并不能识别根workspace之外的依赖。
 
-### lerna最佳实践
+## lerna最佳实践
 
 开源项目,采用fixed模式，原因是开源项目涉及到的包比较多，且发布版本之间的时间间隔会比较长
 
-```
+```json
 lerna.json
 {
   "version": "0.0.1",
@@ -929,7 +929,7 @@ lerna.json
   }
 }
 ```
-```
+```json
 {
   "scripts": {
     "p-prepatch": "lerna publish prepatch",
@@ -940,7 +940,7 @@ lerna.json
 
 公司内部项目可以根据具体场景决定采用fixed模式还是independent模式
 
-```
+```json
 lerna.json
 {
   "version": "independent",

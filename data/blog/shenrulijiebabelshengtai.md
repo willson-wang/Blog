@@ -3,14 +3,14 @@
   date: 2019-08-25T14:21:06Z
   lastmod: 2023-03-26T09:17:22Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "babel"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/babel.jpeg']
   bibliography: references-data.bib
 ---
 
-# 目录
+## 目录
 
 1. babel是什么
 2. babel的使用方式
@@ -24,11 +24,11 @@
 10. babel推荐配置
 11. 总结
 
-### 1. babel是什么
+## 1. babel是什么
 
 babel是一个javascript编译器，一个可以将现代ECMAScript 2015+代码转化为旧版浏览器或node环境中运行的JavaScript代码的工具。
 
-#### babel的诞生
+### babel的诞生
 
 Babel 的前身是 6to5 这个库， 6to5的作者是Facebook 的澳大利亚的工程师 [Sebastian McKenzie](https://twitter.com/sebmck?lang=zh-cn), 6to5 是 2014 年 发布的，主要功能是 就是 ES6 转成 ES5 , 它使用 转换AST的引擎不是自己写的 ，fork了 一个更古老的库 acorn ,在2015年 1月份 6to5 和 Esnext 库(这个是 Ember cli 用的，Ember也是一个很出名的框架,国内用的人比较少)的团队决定一起开发 6to5,并改名为 Babel ,解析引擎改名为 Babylon ,再后来  Babylon 移入 到 @babel/parser
 
@@ -41,18 +41,18 @@ Babel fish
 
 > "The Babel fish," said The Hitchhiker's Guide to the Galaxy quietly, "is small, yellow and leech-like, and probably the oddest thing in the Universe. It feeds on brainwave energy received not from its own carrier but from those around it. It absorbs all unconscious mental frequencies from this brainwave energy to nourish itself with. It then excretes into the mind of its carrier a telepathic matrix formed by combining the conscious thought frequencies with nerve signals picked up from the speech centres of the brain which has supplied them. The practical upshot of all this is that if you stick a Babel fish in your ear you can instantly understand anything in any form of language. The speech patterns you actually hear decode the brainwave matrix which has been fed into your mind by your Babel fish.
 
-#### babel版本发布时间
+### babel版本发布时间
 
 - 2015-02-15，6to5重命名为babel
 - 2015-03-31，babel 5.0发布
 - 2015-10-30，babel 6.0发布
 - 2018-08-27, babel 7.0发布
 
-### 2. babel的使用方式
+## 2. babel的使用方式
 
-<h4>babel6.x</h4>
+### babel6.x
 
-```
+```js
 .babelrc
 
 yarn add babel-core babel-preset-env babel-plugin-transform-runtime babel-cli --dev
@@ -88,9 +88,9 @@ yarn add babel-runtime
 }
 ```
 
-<h4>babel7.x</h4>
+### babel7.x
 
-```
+```js
 .babelrc
 
 yarn add @babel/core @babel/preset-env @babel/plugin-transform-runtime @babel/cli --dev
@@ -118,7 +118,7 @@ yarn add @babel/runtime
 ```
 看似很简单的配置，然而我们经常会迷失在babel的各种插件及配置上，所以为了更好的使用，便需要深入了解常用插件的作用，及产生的原因,然后进行总结(总结的时候以babel7版本为主，同时也包含了一部分babel6的内容)
 
-### 3. babel的处理流程
+## 3. babel的处理流程
 
 ![image](https://user-images.githubusercontent.com/20950813/67635484-dfb5df80-f902-11e9-95d0-07ea1f151c2b.png)
 
@@ -141,7 +141,7 @@ AST是babel转译的核心数据，后续的操作都依赖于AST
 
 最后就是Generator（代码生成），生成阶段将AST转换回字符串形式的javascript;同时生成soucemap
 
-### 4. babel的架构模式
+## 4. babel的架构模式
 
 通过我们日常使用babel的过程中，我们发现，我们基本都是在与插件及插件的配置打交到，不同的功能使用不同的插件来完成目的，各个插件之前互相独立，却又依赖与babel，那么这是不是就是一种架构模式呢？是的，这就是一种架构模式，叫做微内核架构。
 
@@ -165,7 +165,7 @@ AST是babel转译的核心数据，后续的操作都依赖于AST
 
 然后我们在回过头来看babel
 
-<h4>babel核心</h4>
+### babel核心
 
 @babel/core 这也是上面说的‘微内核’架构中的‘内核’。对于Babel来说，这个内核主要干这些事情：
 
@@ -177,7 +177,7 @@ AST是babel转译的核心数据，后续的操作都依赖于AST
 
 我们看下@babel/core的package.json
 
-```
+```json
 "dependencies": {
     "@babel/generator": "^7.6.4",
     "@babel/helpers": "^7.6.2",
@@ -188,7 +188,7 @@ AST是babel转译的核心数据，后续的操作都依赖于AST
 },
 ```
 
-<h4>babel核心周边支撑</h4>
+### babel核心周边支撑
 
 @babel/parser javascript解析器，提供生成AST的方法，fork于acron；它已经内置支持很多语法. 例如 JSX、Typescript、Flow、以及最新的ECMAScript规范。目前为了执行效率，parser是不支持扩展的，由官方进行维护。如果你要支持自定义语法，可以 fork 它，不过这种场景非常少。
 
@@ -198,7 +198,7 @@ AST是babel转译的核心数据，后续的操作都依赖于AST
 
 一个完整的解析流程
 
-```
+```js
 demo1.js
 
 const babel =  require("@babel/core");
@@ -223,7 +223,7 @@ const output = generate(ast, { /* options */ }, code);
 console.log('output', output.code)
 ```
 
-```
+```js
 demo2.js
 
 const parser =  require("@babel/parser");
@@ -253,7 +253,7 @@ console.log('output', output.code)
 // }
 ```
 
-<h4>babel插件</h4>
+### babel插件
 
 babel的插件分为两类
 
@@ -261,7 +261,7 @@ Syntax Plugins (语法插件)这些插件只允许Babel解析特定类型的语�
 
 一般用户不需要关心这个，Transform 插件里面已经包含了相关的plugin-syntax-*插件了。用户也可以通过parserOpts配置项来直接配置 Parser
 
-```
+```js
 {
   "parserOpts": {
     "plugins": ["jsx", "flow"]
@@ -276,7 +276,7 @@ Transform Plugins (转化插件)用于对 AST 进行转换, 实现转换为ES5�
 
 特殊的插件-预设插件(@babel/presets-*)： 插件集合或者分组，主要方便用户对插件进行管理和使用。比如preset-env含括所有的标准的最新特性; 再比如preset-react含括所有react相关的插件
 
-<h4>babel插件开发辅助</h4>
+### babel插件开发辅助
 
 @babel/template： 某些场景直接操作AST太麻烦，就比如我们直接操作DOM一样，所以Babel实现了这么一个简单的模板引擎，可以将字符串代码转换为AST。比如在生成一些辅助代码(helper)时会用到这个库
 
@@ -286,7 +286,7 @@ Transform Plugins (转化插件)用于对 AST 进行转换, 实现转换为ES5�
 
 @babel/helper： 辅助代码，单纯的语法转换可能无法让代码运行起来，比如低版本浏览器无法识别class关键字，这时候需要添加辅助代码，对class进行模拟。
 
-<h4>babel工具</h4>
+### babel工具
 
 @babel/node： Node.js CLI, 通过它直接运行需要 Babel 处理的JavaScript文件
 
@@ -294,11 +294,11 @@ Transform Plugins (转化插件)用于对 AST 进行转换, 实现转换为ES5�
 
 @babel/cli： CLI工具
 
-### 4. babel插件执行顺序
+## 5. babel插件执行顺序
 
 在第三步中我们已经知道了哪些是babel的核心，哪些是babel的辅助工具，哪些是插件，我们现在就需要了解这些插件是怎样被调用的
 
-<h4>常用的babel核心库及插件名称</h4>
+### 常用的babel核心库及插件名称
 
 babel7.x    | babel6.x
 -----       | -----
@@ -309,9 +309,9 @@ babel7.x    | babel6.x
 @babel/polyfill (7.4.0版本已被废弃),使用"core-js", "regenerator-runtime/runtime"来进行替换 | babel-polyfill;
 @babel/runtime | babel-runtime
 
-<h4>插件的引入的方式</h4>
+### 插件的引入的方式
 
-```
+```js
 // 可以是不带路径的方式，自动在node_modules内查找
 {
   "plugins": ["babel-plugin-myPlugin"]
@@ -325,7 +325,7 @@ babel7.x    | babel6.x
 
 同时也可以使用插件速写来引入
 
-```
+```js
 // babel-plugin-xxx 的插件都可以省略babel-plugin-
 {
   "plugins": [
@@ -335,13 +335,13 @@ babel7.x    | babel6.x
 }
 ```
 
-<h4>插件执行的顺序</h4>
+### 插件执行的顺序
 
 1. Plugins run before Presets  Plugins插件顺序在Presets插件顺序之前执行
 2. Plugin ordering is first to last. // Plugins插件从左至右依次执行
 3. Preset ordering is reversed (last to first) //Presets插件从右至走依次执行
 
-```
+```js
 {
   "presets": ["es2015", "react", "stage-2"],
   "plugins": ["transform-decorators-legacy", "transform-class-properties"]
@@ -354,7 +354,7 @@ babel7.x    | babel6.x
 
 插件的传参格式，一般有以下几种
 
-```
+```js
 {
   "plugins": ["pluginA", ["pluginA"], ["pluginA", {}]]
 }
@@ -374,7 +374,7 @@ babel7.x    | babel6.x
 
 ```
 
-<h4>常用的预设插件</h4>
+### 常用的预设插件
 
 @babel/preset-env
 @babel/preset-flow
@@ -388,7 +388,7 @@ babel7.x    | babel6.x
 <details>
     <summary>@babel/preset-react源码</summary>
 
-```
+```js
 import { declare } from "@babel/helper-plugin-utils";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
@@ -422,9 +422,9 @@ export default declare((api, opts) => {
 </details>
 
 
-<h4>创建一个Preset插件</h4>
+### 创建一个Preset插件
 
-```
+```js
 // 同plugin的书写格式
 module.exports = () => ({
   presets: [
@@ -439,7 +439,7 @@ module.exports = () => ({
 
 Preset插件的缩写同Plugin缩写一样，区别就是预算的前缀是babel-preset-
 
-```
+```js
 {
   "presets": [
     "myPreset",
@@ -457,16 +457,16 @@ Preset插件的缩写同Plugin缩写一样，区别就是预算的前缀是babel
 
 当了解完babel的一些基本概念之后,我们已经知道插件的引入方式，插件的运行顺序，预设插件的作用；所以接下来我们将要详细了解主要插件；从6.x的版本看起，因为6.x到7.x语法上是没什么变化的，主要变化是插件的名称及部分插件的配置项，还有一些包的拆分、废弃、重命名
 
-### 6. 深入理解babel6.x插件
+## 6. 深入理解babel6.x插件
 
-<h4>babel-preset-es2015（env之后被废弃）</h4>
+### babel-preset-es2015（env之后被废弃）
 
 babel-preset-es2015预设包含一些es6语法解析的插件，如箭头函数、块级作用域、结构、默认参数等；
 
 可配置参数loose（boolean）, defaults to false.  是否松散转化
 modules："amd" | "umd" | "systemjs" | "commonjs" | false, defaults to "commonjs" 输出任何模块
 
-```
+```js
 .babelrc
 
 {
@@ -482,7 +482,7 @@ modules："amd" | "umd" | "systemjs" | "commonjs" | false, defaults to "commonjs
 }
 ```
 
-```
+```js
 // babel-preset-es2015源码，其实暴露的就是一组es6语法转化的插件
 return {
   plugins: [
@@ -514,7 +514,7 @@ return {
 };
 ```
 
-```
+```js
 In
 var a = (b) => b;
 
@@ -524,11 +524,11 @@ var a = function (b) {
 };
 ```
 
-<h4>babel-preset-es2016（env之后被废弃）</h4>
+### babel-preset-es2016（env之后被废弃）
 
 babel-preset-es2016只包含一个幂运算操作符转化插件，没有可配置参数；注意不包含es2015预设
 
-```
+```js
 .babelrc
 
 {
@@ -543,17 +543,17 @@ babel-preset-es2016只包含一个幂运算操作符转化插件，没有可配�
 }
 ```
 
-```
+```js
 plugins: [
   transformExponentiationOperator
 ]
 ```
 
-<h4>babel-preset-es2017（env之后被废弃）</h4>
+### babel-preset-es2017（env之后被废弃）
 
 babel-preset-es2017只包含一个尾逗号转化及asycn语法转化插件，没有可配置参数；注意不包含es2015、es2016预设
 
-```
+```js
 .babelrc
 
 {
@@ -565,18 +565,18 @@ babel-preset-es2017只包含一个尾逗号转化及asycn语法转化插件，�
 }
 ```
 
-```
+```js
 plugins: [
   syntaxTrailingFunctionCommas,
   transformAsyncToGenerator
 ]
 ```
 
-<h4>babel-preset-latest（env之后被废弃）</h4>
+### babel-preset-latest（env之后被废弃）
 
 babel-preset-latest是包含babel-preset-es2015|babel-preset-es2016|babel-preset-es2017三个预设的集合，避免我们在使用中单个引入，可以通过参数控制是否需要加载对应的预设
 
-```
+```js
 {
     "presets": [
         [
@@ -593,7 +593,7 @@ babel-preset-latest是包含babel-preset-es2015|babel-preset-es2016|babel-preset
 }
 ```
 
-```
+```js
 export default function (context, opts = {}) {
   return {
     presets: [
@@ -605,11 +605,11 @@ export default function (context, opts = {}) {
 }
 ```
 
-<h4>babel-preset-stage-0</h4>
+### babel-preset-stage-0
 
 babel-preset-stage-0预设是包含当年想法阶段的语法转化插件及其它的1、2、3个阶段的预设，ECMASCRIPT语法具体发布流程如下所示
 
-```
+```js
 The TC39 categorizes proposals into the following stages:
 
 Stage 0 - Strawman: just an idea, possible Babel plugin. // 想法阶段
@@ -621,7 +621,7 @@ Stage 4 - Finished: will be added to the next yearly release. // 完成阶段，
 所以第3阶段之前的任何事情，都应该谨慎使用
 ```
 
-```
+```js
 {
     "presets": [
         "stage-0"
@@ -629,7 +629,7 @@ Stage 4 - Finished: will be added to the next yearly release. // 完成阶段，
 }
 ```
 
-```
+```js
 export default {
   presets: [
     presetStage1
@@ -643,7 +643,7 @@ export default {
 
 其余的babel-preset-stage-1、babel-preset-stage-2、babel-preset-stage-3同babel-preset-stage-0的配置是类似的，只是包含的语法转化不一样
 
-<h4>babel-preset-env（终极预设）</h4>
+### babel-preset-env（终极预设）
 
 babel-preset-env根据目标环境加载对应的bable语法转化插件及polyfill；如果传入目标环境则，默认与babel-preset-latest的功能是一样的，如果传入了需要运行的目标环境，则会根据目标环境自动加载对应的plugin
 
@@ -660,7 +660,7 @@ targets | include | exclude | useBuiltIns |
 <details>
     <summary>以targets >= ie9及targets >= edg15 useBuiltIns=true为例</summary> 
 
-```
+```js
 {
     "presets": [
         [
@@ -684,7 +684,7 @@ targets | include | exclude | useBuiltIns |
 
 我们已targets >= ie9及targets >= edg15来看下babel是怎样进行polyfill的处理
 
-```
+```js
 {
     "presets": [
         [
@@ -702,7 +702,7 @@ targets | include | exclude | useBuiltIns |
 }
 ```
 
-```
+```js
 index.js
 
 import "babel-polyfill";
@@ -728,7 +728,7 @@ var promise = new Promise;
 Array.from(new Set([1, 4, 6]))
 ```
 
-```
+```js
 target >= 9 babel处理后的index.js
 
 import "core-js/modules/es6.typed.array-buffer";
@@ -998,7 +998,7 @@ babel处理时加载的plugins:
 
 ```
 
-```
+```js
 target >= edge15 babel处理后的index.js
 
 import "core-js/modules/es6.symbol";
@@ -1057,7 +1057,7 @@ polyfills:
 
 babel-preset-env源码
 
-```
+```js
 export const isPluginRequired = (supportedEnvironments, plugin) => {
   const targetEnvironments = Object.keys(supportedEnvironments);
 
@@ -1212,11 +1212,11 @@ export default function buildPreset(context, opts = {}) {
 ```
 </details>
 
-<h4>babel-polyfill</h4>
+### babel-polyfill
 
 polyfill为目标环境提供垫片，其内部引用的是core-js及regenerator-runtime这两个包；core-js提供所有es5+ api polyfill;regenerator-runtime提供generator polyfill
 
-```
+```js
 if (global._babelPolyfill) {
   throw new Error("only one instance of babel-polyfill is allowed");
 }
@@ -1226,13 +1226,13 @@ import "core-js/shim";
 import "regenerator-runtime/runtime";
 ```
 
-<h4>babel-runtime（babel-plugin-transform-runtime配合使用）</h4>
+### babel-runtime（babel-plugin-transform-runtime配合使用）
 
 1. 提供regenerator-runtime插件，便于转化generator函数
 2. 通过corejs引入无污染的polyfill
 3. 提供公共的helper函数
 
-```
+```js
 // core-js/library下提供的就是无污染的polyfill
 module.exports = { "default": require("core-js/library/fn/promise"), __esModule: true };
 ```
@@ -1241,14 +1241,14 @@ babel-runtime有一个缺陷就是只对内置函数如Promise、Set及静态方
 
 babel-runtime与babel-polyfill的区别则是前者可以提供部分无污染的polyfill，及helper函数及无污染的regenerator；而后者只提供全局的polyfill及regenerator
 
-<h4>babel-plugin-transform-runtime（与babel-runtime配合使用）</h4>
+### babel-plugin-transform-runtime（与babel-runtime配合使用）
 
 plugin-transform-runtime做3件事情
 1. 引入babel-runtime/regenerator插件，便于转化generator函数
 2. 通过引入corejs来解决全局变量污染的问题、注意不包括原型方法,如findIndex等
 3. 将helper函数从外部引入，而不是每个需要的地方生成，减少重复代码
 
-```
+```js
 {
     "presets": [
         [
@@ -1278,7 +1278,7 @@ plugin-transform-runtime做3件事情
 }
 ```
 
-```
+```js
 In
 class Person {
 }
@@ -1308,7 +1308,7 @@ _Array$from(new _Set([1, 4, 6]));
 <details>
     <summary>看一个具体的例子</summary> 
 
-```
+```js
 // targes >= ie9 useBuiltIns = false transform-runtime
 {
     "presets": [
@@ -1337,7 +1337,7 @@ _Array$from(new _Set([1, 4, 6]));
 
 ```
 
-```
+```js
 index.js
 
 const name = 'jack';
@@ -1361,7 +1361,7 @@ var promise = new Promise;
 Array.from(new Set([1, 4, 6]))
 ```
 
-```
+```js
 targes >= ie9 useBuiltIns = false transform-runtime babel处理后的index.js
 
 import _Set from 'babel-runtime/core-js/set';
@@ -1413,11 +1413,11 @@ _Array$from(new _Set([1, 4, 6]));
 ```
 </details>
 
-### 7. 深入理解babel7.x插件
+## 7. 深入理解babel7.x插件
 
 后面都会围绕下面这个例子来进行讲解
 
-```
+```js
 index.js 
 
 const arr = [1, 3, 5, 7]
@@ -1437,13 +1437,13 @@ class Circe {}
 function* foo() {}
 ```
 
-<h4>@babel-cli</h4> 
+### @babel-cli 
 
 babel的cli工具，帮助我们可以通过命令行来实现对文件的转化，一般按项目安装，而不是全局安装，这样便于不同的项目允许使用不同版本的babel
 
 使用方式，如下所示
 
-```
+```shell
 执行方式
 放在npm scripts内 babel script.js || ./node_modules/.bin/babel script.js
 
@@ -1469,7 +1469,7 @@ babel script.js --out-file script-compiled.js --presets=@babel/preset-env,@babel
 babel --no-babelrc script.js --out-file script-compiled.js --presets=es2015,react
 ```
 
-<h4>@babel/preset-env(由babel-env更名而来)</h4>
+### @babel/preset-env(由babel-env更名而来)
 
 回顾之前的babel6的preset-env中，polyfill是不支持按需引入的，所以无形中增加了包的体积；
 
@@ -1487,7 +1487,7 @@ targets | modules | useBuiltIns | corejs | shippedProposals |
 
 <h5>场景一 useBuiltIns "usage" and core-js 2</h5>
 
-```
+```js
 .babelrc 
 {
   "presets": [
@@ -1506,7 +1506,7 @@ targets | modules | useBuiltIns | corejs | shippedProposals |
 }
 ```
 
-```
+```js
 babel 处理后的index.js
 
 import "regenerator-runtime/runtime";
@@ -1551,7 +1551,7 @@ function foo() {
 
 <h5>场景二 useBuiltIns "usage" and core-js 2</h5>
 
-```
+```js
 .babelrc 
 {
   "presets": [
@@ -1570,7 +1570,7 @@ function foo() {
 }
 ```
 
-```
+```js
 babel处理后的index.js 
 
 import "core-js/modules/es6.array.copy-within";
@@ -1619,7 +1619,7 @@ function foo() {
 
 <h5>场景三 useBuiltIns "usage" and core-js 3</h5>
 
-```
+```js
 .babelrc 
 {
   "presets": [
@@ -1638,7 +1638,7 @@ function foo() {
 }
 ```
 
-```
+```js
 babel 处理后的index.js
 
 import "core-js/modules/es.array.find-index";
@@ -1682,7 +1682,7 @@ function foo() {
 
 <h5>场景四 useBuiltIns "entry" and core-js 3</h5>
 
-```
+```js
 .babelrc 
 {
   "presets": [
@@ -1701,7 +1701,7 @@ function foo() {
 }
 ```
 
-```
+```js
 import "core-js/modules/es.symbol";
 import "core-js/modules/es.symbol.description";
 import "core-js/modules/es.symbol.async-iterator";
@@ -1748,7 +1748,7 @@ function foo() {
 
 <h5>场景五 useBuiltIns false 不进行polyfill</h5>
 
-```
+```js
 .babelrc 
 {
   "presets": [
@@ -1772,7 +1772,7 @@ function foo() {
 <details>
     <summary>@babel/preset-env源码</summary> 
 
-```
+```js
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
@@ -1911,9 +1911,9 @@ export default declare((api, opts) => {
 
 从上一步我们可以知道，通过getPolyfillPlugins方法获取四种场景下的polyfill插件列表
 
-#### 场景一 useBuiltIns: "entry" corejs: 2 引入的是replaceCoreJS2EntryPlugin插件
+### 场景一 useBuiltIns: "entry" corejs: 2 引入的是replaceCoreJS2EntryPlugin插件
 
-```
+```js
 export default function(
   _: any,
   {
@@ -1995,9 +1995,9 @@ export default function(
 }
 ```
 
-#### 场景二 useBuiltIns: "entry" corejs: 3 引入的是replaceCoreJS3EntryPlugin插件
+### 场景二 useBuiltIns: "entry" corejs: 3 引入的是replaceCoreJS3EntryPlugin插件
 
-```
+```js
 export default function(
   _: any,
   { corejs, include, exclude, polyfillTargets, debug }: InternalPluginOptions,
@@ -2078,9 +2078,9 @@ export default function(
 与replaceCoreJS3EntryPlugin的区别除来core-js引入的版本不同，还有就是创建引入core-js/modules/es.symbol等依赖的时候增加了去重及循环引用
 ```
 
-#### 场景三 useBuiltIns: "usage" corejs: 2 引入的是addCoreJS2UsagePlugin插件
+### 场景三 useBuiltIns: "usage" corejs: 2 引入的是addCoreJS2UsagePlugin插件
 
-```
+```js
 export default function(
   { types: t }: { types: Object },
   { include, exclude, polyfillTargets, debug }: InternalPluginOptions,
@@ -2271,9 +2271,9 @@ export default function(
 }
 ```
 
-#### 场景四 useBuiltIns: "usage" corejs: 3 引入的是addCoreJS3UsagePlugin插件
+### 场景四 useBuiltIns: "usage" corejs: 3 引入的是addCoreJS3UsagePlugin插件
 
-```
+```js
 export default function(
   _: any,
   {
@@ -2496,7 +2496,7 @@ export default function(
 
 corejs3、按需polyfill，不支持提案polyfill
 
-```
+```js
 {
   "presets": [
     [
@@ -2527,7 +2527,7 @@ corejs3、按需polyfill，不支持提案polyfill
 
 corejs3、按需polyfill，支持所有提案polyfill
 
-```
+```js
 {
   "presets": [
     [
@@ -2555,7 +2555,7 @@ corejs3、按需polyfill，支持所有提案polyfill
 }
 ```
 
-<h4>@babel/polyfill</h4>
+### @babel/polyfill
 
 babel插件默认只对语法进行转化，不会对api进行转化，所以诸如es6、es7的新内置函数WeakMap, Promise, 静态方法Array.from, Object.assign, 实例方法Array.prototype.includes, generator函数都是不会转化的，所以我们为了现在低版本浏览器的兼容，则需要引入垫片polyfill，确保在低版本浏览器上这些函数or方法能够正常运行
 
@@ -2563,7 +2563,7 @@ babel插件默认只对语法进行转化，不会对api进行转化，所以诸
 
 在Node / Browserify / Webpack中的使用方式
 
-```
+```js
 node
 require("@babel/polyfill"); || import "@babel/polyfill"; 在项目的开头位置引入
 
@@ -2588,7 +2588,7 @@ dist/polyfill.js
 
 什么是helper函数,做一些通用辅助工作的
 
-```
+```js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Circe = function Circe() {
@@ -2598,21 +2598,21 @@ var Circe = function Circe() {
 
 既然我们在引入polyfill之后会污染全局变量及重复引入一些函数，那么有没有什么解决方法呢？有答案就是引入@babel/plugin-transform-runtime
 
-<h4>@babel/plugin-transform-runtime</h4>
+### @babel/plugin-transform-runtime
 
 plugin-transform-runtime做3件事情
 1. 引入@babel/runtime/regenerator插件，便于转化generator函数
 2. 通过引入corejs来解决全局变量污染的问题
 3. 将helper函数从外部引入，而不是每个需要的地方生成，减少重复代码
 
-```
+```js
 var promise = Promise.resolve();
 
 通过plugin-transform-runtime转化之后
 import _Promise from "@babel/runtime-corejs3/core-js-stable/promise";
 ```
 
-```
+```js
 class Person {}
 
 没有添加runtime
@@ -2647,7 +2647,7 @@ corejs false, 2, 3 or `{ version: 2 , 3, proposals: boolean }`, defaults to fals
 
 不同的corejs参数，对应不同的runtime插件
 
-```
+```shell
 false	npm install --save @babel/runtime
 2	npm install --save @babel/runtime-corejs2
 3	npm install --save @babel/runtime-corejs3
@@ -2659,7 +2659,7 @@ false	npm install --save @babel/runtime
 
 corejs为false时，只从@babel/runtime中引入了helper函数及_regeneratorRuntime
 
-```
+```js
 // Promise及findIndex都是没有做处理的
 var arr = [1, 3, 5, 7];
 var idx = arr.findIndex(function (item) {
@@ -2678,7 +2678,7 @@ var Circe = function Circe() {
 
 如corejs为2时，从@babel/runtime-corejs2中引入了helper函数、_regeneratorRuntime及对应全局属性的polyfill
 
-```
+```js
 // 会处理全局属性，避免全局变量污染
 import _Promise from "@babel/runtime-corejs2/core-js/promise";
 var arr = [1, 3, 5, 7];
@@ -2700,7 +2700,7 @@ var Circe = function Circe() {
 <h5>场景三、corejs为3时</h5>
 
 如corejs为3时，从@babel/runtime-corejs3中引入了helper函数、_regeneratorRuntime及对应全局属性、静态方法、原型方法、提案方法的polyfill
-```
+```js
 // 会处理全局属性、静态方法、原型方法
 import _Promise from "@babel/runtime-corejs3/core-js-stable/promise";
 import _findIndexInstanceProperty from "@babel/runtime-corejs3/core-js-stable/instance/find-index";
@@ -2724,7 +2724,7 @@ var Circe = function Circe() {
 <h5>场景四、corejs为3，且roposals为true</h5>
 
 如corejs为3时,且proposals为true
-```
+```js
 // 会处理全局属性、静态方法、原型方法及提案
 import _Promise from "@babel/runtime-corejs3/core-js-stable/promise";
 import _findIndexInstanceProperty from "@babel/runtime-corejs3/core-js-stable/instance/find-index";
@@ -2750,19 +2750,19 @@ var matches = _matchAllInstanceProperty(str).call(str, regexp);
 
 同时这些辅助函数及polyfill垫片都会从对应的@babel/runtime中引入
 
-<h4>@babel/runtime</h4>
+### @babel/runtime
 
 为@babel/plugin-transform-runtime插件提供helper方法
 
 会根据@babel/plugin-transform-runtime插件的corejs参数做不同的引入
 
-```
-false	npm install --save @babel/runtime
-2	npm install --save @babel/runtime-corejs2
-3	npm install --save @babel/runtime-corejs3
+```shell
+	npm install --save @babel/runtime
+	npm install --save @babel/runtime-corejs2
+	npm install --save @babel/runtime-corejs3
 ```
 
-<h4>@babel-polyfill与@babel-runtime的区别</h4>
+### @babel-polyfill与@babel-runtime的区别
 
 @babel-polyfill包含core-js及regenerator-runtime这两个插件
 @babel-runtime包含helper方法、regenerator,然后还有@babel/runtime-corejs2、@babel/runtime-corejs3里面都有少许区别
@@ -2772,7 +2772,7 @@ false	npm install --save @babel/runtime
 @babel-polyfill与@babel/runtime-corejs2及@babel/runtime-corejs3的区别，相同点这三个插件都可以用来polyfill，不同点@babel-polyfill如果不是手动去添加不同api的polyfill的话，则需要配合env插件的useBuiltInsc按时来决定是按需polyfill还是全部polyfill，且都是全局污染的进行；而@babel/runtime-corejs2及@babel/runtime-corejs3则都是按需polyfill，还有就是@babel/runtime-corejs3还能对提案进行polyfill，而@babel/runtime-corejs2不支持
 
 全局引入，会污染全局变量及修改原型链上的方法
-```
+```js
 import "core-js/modules/es6.promise";
 
 var a = Promise.resolve(2);
@@ -2782,7 +2782,7 @@ a.then(function (res) {
 ```
 
 模块的方式引入，不会污染全局的变量
-```
+```js
 import _Promise from "@babel/runtime-corejs2/core-js/promise";
 
 var a = _Promise.resolve(2);
@@ -2791,19 +2791,19 @@ a.then(function (res) {
 });
 ```
 
-### 8. 访问者模式
+## 8. 访问者模式
 
-<h4>AST遍历</h4>
+### AST遍历
 
 先看一个例子
-```
+```js
 function square(n) {
   return n * n;
 }
 ```
 
 假设它的AST如下所示
-```
+```js
 {
   type: "FunctionDeclaration",
   id: {
@@ -2836,7 +2836,7 @@ function square(n) {
 ```
 
 我们使用traverse遍历节点
-```
+```js
 const parse = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 
@@ -2898,11 +2898,11 @@ BinaryExpression 有一个 operator，一个 left，和一个 right。 Operator 
 
 第二个问题，在遍历的过程中我们可以获取当前具体的节点，如FunctionDeclaration、Identifier等等，而在遍历的时候有一种模式，可以获取当前具体节点，我们把这种方式叫做[访问者模式（visitor）](https://en.wikipedia.org/wiki/Visitor_pattern)
 
-<h4>babel中访问者模式的使用方式</h4>
+### babel中访问者模式的使用方式
 
 1. 创建一个访问者对象,然后这个访问者对象具有不同节点类型的方法
 
-```
+```js
 const visitor = {
     NumberLiteral() {
 
@@ -2915,7 +2915,7 @@ const visitor = {
 
 2. 当我们遍历我们的ast时，进入一个匹配的节点类型时，我们将会调用访问者对应的方法,然后在调用的时候，传入当前节点相关的信息，以便我们在方法内操作节点
 
-```
+```js
 const visitor = {
     NumberLiteral(path) {
 
@@ -2928,7 +2928,7 @@ const visitor = {
 
 3. 因为采用的是树形遍历，当我们向下遍历的时候，将会到达树分支的尽头，当我们遍历完每个树分支的时候，我们又需要退出树分支，所以当我们向下遍历的时候我们enter进入树的每个节点，当向下遍历完之后我们退出exit每个节点，所有最终的访问者形式如下所示
 
-```
+```js
 const visitor = {
     NumberLiteral: {
         enter(path) {},
@@ -2947,7 +2947,7 @@ const visitor = {
 
 Babel 会按照插件定义的顺序来应用访问方法，比如你注册了多个插件，babel-core 最后传递给访问器的数据结构大概长这样：
 
-```
+```js
 {
   Identifier: {
     enter: [plugin-xx, plugin-yy,] // 数组形式
@@ -2957,7 +2957,7 @@ Babel 会按照插件定义的顺序来应用访问方法，比如你注册了�
 
 当进入一个节点时，这些插件会按照注册的顺序被执行。大部分插件是不需要开发者关心定义的顺序的，有少数的情况需要稍微注意以下，例如plugin-proposal-decorators:
 
-```
+```js
 {
   "plugins": [
     "@babel/plugin-proposal-decorators",     // 必须在plugin-proposal-class-properties之前
@@ -2968,7 +2968,7 @@ Babel 会按照插件定义的顺序来应用访问方法，比如你注册了�
 
 所有插件定义的顺序，按照惯例，应该是新的或者说实验性的插件在前面，老的插件定义在后面。因为可能需要新的插件将 AST 转换后，老的插件才能识别语法（向后兼容）。下面是官方配置例子, 为了确保先后兼容，stage-*阶段的插件先执行:
 
-```
+```js
 {
   "presets": ["es2015", "react", "stage-2"]
 }
@@ -2976,13 +2976,13 @@ Babel 会按照插件定义的顺序来应用访问方法，比如你注册了�
 
 通过上面的了解我们知道，插件(设计模式中称为‘具体访问者’)只需要定义自己感兴趣的节点类型，当访问者访问到对应节点时，就调用插件的访问(visit)方法。这时babel会为我们的访问者方法传入一个path参数，那么这个path参数的作用是什么呢？
 
-<h4>path路径</h4>
+### path路径
 
 path参数的作用就是关联节点，是表示两个节点之间连接的对象；把这个AST看成一棵树，树上节点之前的关联关系通过path来表示；这样最终是用一个可操作和访问的巨大可变对象表示节点之间的关联关系
 
 例如,如果有下面这样一个节点及其子节点︰
 
-```
+```js
 {
   type: "FunctionDeclaration",
   id: {
@@ -2995,7 +2995,7 @@ path参数的作用就是关联节点，是表示两个节点之间连接的对�
 
 将子节点 Identifier 表示为一个路径（Path）的话，看起来是这样的
 
-```
+```js
 {
   "parent": {  // 父节点FunctionDeclaration
     "type": "FunctionDeclaration",
@@ -3011,7 +3011,7 @@ path参数的作用就是关联节点，是表示两个节点之间连接的对�
 
 同时路径path还包含如下信息
 
-```
+```js
 {
   "parent": {...}, // 父节点
   "node": {...},  // 当前节点
@@ -3043,7 +3043,7 @@ path参数的作用就是关联节点，是表示两个节点之间连接的对�
 也就是AST在转化的时候产生的副作用，已经被babel处理了，那什么是副作用，举个列子
 
 将`function square(n) {return n * n}`
-```
+```js
 traverse(ast, {
     ReturnStatement(path) {
         const new = t.expressionStatement(t.callExpression(t.memberExpression('console', t.identifier('log'), false, false), path.node.argument))
@@ -3056,7 +3056,7 @@ traverse(ast, {
 
 另外我们在看一个例子
 
-```
+```js
 const a = 1
 const b = 1
 function square (n) {
@@ -3070,7 +3070,7 @@ function square (n) {
 
 如果我们需要把函数传入的参数n名称改为a
 
-```
+```js
 traverse(ast, {
     FunctionDeclaration(path) {
         // 获取参数及参数名称
@@ -3101,11 +3101,11 @@ console.log(generate(ast).code)
 // }
 ```
 
-<h4>作用域Scope</h4>
+### 作用域Scope
 
 显然console.log(a, b)的行为已经被破坏了，因为a已经成了传入的参数a，而不是外层的变量a；所以我们需要换了变量名，如c等等；所以从这个例子我们可以看出来，当我们在操作AST是，需要考虑作用域Scope；babel中为了我们能够更好的操作AST，提供了Scope，每个Scope包含如下信息
 
-```
+```js
 {
   path: path,
   block: path.node, 
@@ -3121,7 +3121,7 @@ Scope 对象和 Path 对象差不多，它包含了作用域之间的关联关�
 
 每个bingding对象如下所示
 
-```
+```js
 {
   identifier: t.Identifier;
   scope: Scope;
@@ -3139,7 +3139,7 @@ Scope 对象和 Path 对象差不多，它包含了作用域之间的关联关�
 
 然后我们在回过头来看之前修改变量名的例子,现在我们需要重命名n变量为a的时候，不仅需要考虑副作用域，而且还需要考虑子级作用域，完善后的写法
 
-```
+```js
 const getUid() {
     let uid = 0
     return function () {
@@ -3201,7 +3201,7 @@ traverse(ast, {
 然而Babel的 Scope 对象其实提供了一个generateUid方法来生成唯一的、不冲突的标识符。我们利用这个方法再简化一下我们的代码:
 
 
-```
+```js
 traverse(ast, {
     FunctionDeclaration(path) {
         // 获取参数及参数名称
@@ -3224,7 +3224,7 @@ traverse(ast, {
 
 还可以使用babel提供的rename直接修改变量名称
 
-```
+```js
 traverse(ast, {
     FunctionDeclaration(path) {
         // 获取参数及参数名称
@@ -3245,17 +3245,17 @@ traverse(ast, {
 到这里我们对AST节点的处理已经有了一定的了解，那么接下来让我们一起动手写一个babel插件
 
 
-### 9. 怎样写一个babel插件
+## 9. 怎样写一个babel插件
 
 在写插件之前我们在了解下，babel提供操作AST节点及scope的方法
 
 常用Path操作方法
 
-<h4>新增节点</h4>
+### 新增节点
 
 当前节点之前插入新节点 insertBefore(nodes: [Object])
 
-```
+```js
 BooleanLiteral(path) {
   const nodes = [
     t.returnStatement()
@@ -3267,7 +3267,7 @@ BooleanLiteral(path) {
 
 当前节点之后插入新节点 insertAfter
 
-```
+```js
 BooleanLiteral(path) {
   const nodes = [
     t.returnStatement()
@@ -3277,21 +3277,21 @@ BooleanLiteral(path) {
 }
 ```
 
-<h4>删除节点</h4>
+### 删除节点
 
 删除当前remove
 
-```
+```js
 BooleanLiteral(path) {
   path.remove();
 }
 ```
 
-<h4>替换节点</h4>
+### 替换节点
 
 单节点替换 replaceWith(replacement: Object)
 
-```
+```js
 BooleanLiteral(path) {
   path.replaceWithMultiple(t.identifier("bar"));
 }
@@ -3299,7 +3299,7 @@ BooleanLiteral(path) {
 
 多节点替换 replaceWithMultiple(nodes: [Object])
 
-```
+```js
 BooleanLiteral(path) {
   const nodes = [
     t.identifier("foo"),
@@ -3314,13 +3314,13 @@ BooleanLiteral(path) {
 
 generateUidIdentifier(name: string = "temp") 生成一个uniq ID并返回一个标识符
 
-```
+```js
 Identifier(path) {
   path.node.name = path.scope.generateUidIdentifier().name;
 }
 ```
 
-```
+```js
 in
 var foo = "test";
 
@@ -3330,13 +3330,13 @@ var _temp = "test";
 
 generateUid(name: string = "temp")生成一个uniq ID并返回一个字符串
 
-```
+```js
 Identifier(path) {
   path.node.name = path.scope.generateUid().name;
 }
 ```
 
-```
+```js
 in
 var foo = "test";
 
@@ -3346,13 +3346,13 @@ var _temp = "test";
 
 rename(oldName: string, newName?: string, block?: Object) 重命名当前作用域内的某个变量名
 
-```
+```js
 Identifier(path) {
   path.scope.rename("foo");
 }
 ```
 
-```
+```js
 in 
 
 var foo = "test";
@@ -3372,7 +3372,7 @@ hasOwnBinding(name: string)  判断name是否定义在当前作用域
 
 parentHasBinding(name: string, noGlobals?: boolean) 判断name是否定义父前作用域
 
-```
+```js
 var foo = 'test'
 var foo1 = "test1";
 var foo2 = "test2";
@@ -3395,9 +3395,9 @@ path.scope.getBinding('foo1').references // 2
 
 下面让我们一起写两个插件
 
-<h4>针对传入的library进行按需编译</h4>
+### 针对传入的library进行按需编译
 
-```
+```js
 module.exports = function ({ types: t }) {
     return {
         visitor: {
@@ -3431,9 +3431,9 @@ module.exports = function ({ types: t }) {
 }
 ```
 
-<h4>箭头函数转化为普通函数</h4>
+### 箭头函数转化为普通函数
 
-```
+```js
 module.exports = function ({ types: t }) {
   return {
       name: '',
@@ -3497,13 +3497,13 @@ module.exports = function ({ types: t }) {
 
 
 
-### 10. babel推荐配置
+## 10. babel推荐配置
 
 通过上面的了解，我们已经知道babel的架构及核心插件的作用，所以在使用的时候，可以针对应用的类型来合理使用babel
 
 常规业务项目，推荐使用env-useBuiltIns-usage、corejs3,且配合@babel/plugin-transform-runtime，corejs-false,因为我们不需要考虑全局污染带给我们的影响，因为这些都是可控的，babel配置如下所示
 
-```
+```js
 {
   "presets": [
     [
@@ -3544,7 +3544,7 @@ module.exports = function ({ types: t }) {
 
 库or插件则，推荐使用env-useBuiltIns-false,使用@babel/runtime-corejs3配合@babel/plugin-transform-runtime，corejs-3,因为我们需要考虑全局污染带给插件使用者的影响，babel配置如下所示
 
-```
+```js
 {
   "presets": [
     [
@@ -3579,7 +3579,7 @@ module.exports = function ({ types: t }) {
 }
 ```
 
-### 11. 总结
+## 11. 总结
 
 babel现在已经不仅仅是一个将es6+语法转换为es5语法的工具，借助 Babel插件的力量，我们在JavaScript的世界里还有着非常巨大的想象空间，比如添加如jsx一样的自定义语法，换一个generator将javascript代码转化成其它语言的代码等等；
 

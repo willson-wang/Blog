@@ -3,7 +3,7 @@
   date: 2021-06-27T14:48:33Z
   lastmod: 2021-06-27T14:49:04Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "eslint", "parser"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/eslint.png']
@@ -13,7 +13,7 @@
 
 我们在项目中使用了处在提案1阶段的语法时，比如
 
-```
+```js
 export foo from 'foo' 
 export foo, { bar } from "foo";
 ```
@@ -22,14 +22,14 @@ export foo, { bar } from "foo";
 
 当我们使用eslint检查的时候会报如下错误
 
-```
+```js
 Parsing error: Unexpected token foo eslint
 export foo from './foo'
 ```
 
 然后网上去找资料，安装@babel/eslint-parser包可以通过这个校验
 
-```
+```js
 yarn add @babel/core @babel/eslint-parser -D
 
 {
@@ -59,12 +59,12 @@ Parsing error: This experimental syntax requires enabling the parser plugin: 'ex
 
 然后我们安装对应的babel插件
 
-```
+```shell
 yarn add @babel/plugin-proposal-export-default-from -D
 ```
 
 在.babelrc内添加plugins
-```
+```js
 {
     "plugins": [
         "@babel/plugin-proposal-export-default-from"
@@ -82,7 +82,7 @@ yarn add @babel/plugin-proposal-export-default-from -D
 - eslint为什么对于阶段1的语法解析不出来？
 - @babel/eslint-parser的作用是什么？
 
-### 为什么parser可以指定不同的解析器，解析器的作用是什么？
+## 为什么parser可以指定不同的解析器，解析器的作用是什么？
 
 首先我们看下eslint检查代码的原理：
 
@@ -91,7 +91,7 @@ yarn add @babel/plugin-proposal-export-default-from -D
 
 从eslint的lint原理来看，需要将代码转换成ast，而这个将code转换成ast，则需要一个解析器，而eslint选择的解析器则是[Espree](https://github.com/eslint/espree)，而Espree最开始是从[Esprima](https://github.com/jquery/esprima)中拉出来的一个分支
 
-### eslint为什么对于阶段1的语法解析不出来？
+## eslint为什么对于阶段1的语法解析不出来？
 
 原因：ESLint's parser only officially supports the latest final ECMAScript standard
 
@@ -99,7 +99,7 @@ Once a language feature has been adopted into the ECMAScript standard (stage 4 a
 
 也就是说[eslint](https://github.com/eslint/eslint/blob/a675c89573836adaf108a932696b061946abf1e6/README.md#what-about-experimental-features)只支持已发布了的ECMAScript标准语法及进入到stage 4阶段的实验性语法
 
-### @babel/eslint-parser的作用是什么？
+## @babel/eslint-parser的作用是什么？
 
 我们知道新语法从提案到发布是需要经历比较长的一段时间，而有些新语法是会带来不错的开发体验，所以我们会选择在项目中使用这些新语法，而我们一般在项目中都会借助babel来将我们的代码从es6+转化成es5的代码，及选择babel插件来支持实验性的语法;
 
@@ -108,7 +108,7 @@ Once a language feature has been adopted into the ECMAScript standard (stage 4 a
 @babel/eslint-parser将代码生成ast的时候，会被转换成 ESLint 可以理解的 ESTree兼容结构；这样我们就可以在标准的语法上，针对实验性或者非标准的语法做lint检测
 
 @babel/eslint-parser的使用
-```
+```js
 yarn add eslint @babel/core @babel/eslint-parser @babel/eslint-plugin -D
 
 // 需要注意当使用@babel/eslint-parser时，parserOptions部分属性可能不生效，因为parserOptions的属性是针对默认的parser设置的
@@ -129,7 +129,7 @@ module.exports = {
 ```
 
 也可以只针对部分js文件使用@babel/eslint-parser解析
-```
+```js
 module.exports = {
   rules: {
     indent: "error",
@@ -149,7 +149,7 @@ module.exports = {
 
 <b>到这里我们已经知道，针对js的lint，如果我们在项目开发的时候只选择标准语法，不使用实验性的语法或者非标准性的语法，我们使用默认的eslint解析器即可，反之则选择babel/eslint-parser</b>
 
-### 我们现在已经知道js的lint该怎么选了，那么ts的lint要怎么做呢？
+## 我们现在已经知道js的lint该怎么选了，那么ts的lint要怎么做呢？
 
 首先最开始我们的ts项目都是通过tslint来做ts代码的lint检测,eslint是做不到ts代码的代码检测的
 
@@ -169,7 +169,7 @@ tslint是一个专门为基于上述 TypeScript AST 格式而编写的 linter。
 最后经过tslint的核心开发者2019年决定放弃tslint，转而支持 typescript-eslint;具体文章可参考[TSLint in 2019](https://blog.palantir.com/tslint-in-2019-1a144c2317a9);后续TypeScript 团队自己也宣布了将 TypeScript 代码库从 TSLint 迁移到 typescript-eslint 的计划[Migrate the repo to ESLint](https://github.com/microsoft/TypeScript/issues/30553)
 
 
-### 而typescript-eslint又是什么呢？
+## 而typescript-eslint又是什么呢？
 
 ESLint 和 TypeScript 都依赖于将源代码转换为AST的数据格式来完成它们的工作。实际情况是ESLint和TypeScript彼此使用不同的AST；
 
@@ -177,7 +177,7 @@ typescript-eslint 的存在就是让我们可以一起使用 ESLint和TypeScript
 
 typescript-eslint的使用方式
 
-```
+```js
 yarn add -D eslint typescript @typescript-eslint/parser @typescript-eslint/eslint-plugin
 
 module.exports = {
@@ -224,16 +224,16 @@ We have no plans to implement any proposals unless they hit stage 3 and we have 
 
 具体原因参考[What about Babel and @babel/eslint-parser](https://github.com/typescript-eslint/typescript-eslint#what-about-babel-and-babeleslint-parser)
 
-### 总结
+## 总结
 1. eslint常用的解析器有：babel/eslint-parser、@typescript-eslint/parser、espree、esprima
 2. 对js项目，需要支持实验性语法的lint检测，可以使用@babel/eslint-parser，反之则使用默认解析器
 3. 对于ts项目，使用@typescript-eslint/parser，不推荐使用实验性阶段的语法，除非是typescript本身支持的实验性语法
 
-### 推荐配置
+## 推荐配置
 
 js项目不支持实验性语法配置
 
-```
+```js
 yarn add eslint eslint-config-standard eslint-plugin-promise eslint-plugin-import eslint-plugin-node -D
 {
   parserOptions: { 
@@ -248,7 +248,7 @@ yarn add eslint eslint-config-standard eslint-plugin-promise eslint-plugin-impor
 
 js项目支持实验性语法配置
 
-```
+```js
 yarn add eslint @babel/core @babel/eslint-parser -D
 
 {
@@ -262,7 +262,7 @@ yarn add eslint @babel/core @babel/eslint-parser -D
 ```
 
 ts项目配置
-```
+```js
 yarn add -D eslint typescript @typescript-eslint/parser @typescript-eslint/eslint-plugin
 
 module.exports = {
@@ -278,10 +278,10 @@ module.exports = {
 };
 ```
 
-### 补充eslint中extends、plugins、rules之间的区别
+## 补充eslint中extends、plugins、rules之间的区别
 
 先看rules，rules的具体作用,就是实际的eslint检查规则，一条规则对应一种语法检查
-```
+```js
 module.exports = {
   rules: {
     'quotes': 'single',
@@ -294,7 +294,7 @@ module.exports = {
 
 extends的作用就是封装一份常用的eslint配置并当成npm包来使用，需要用到的项目安装对应的npm包,并在extends内引入即可
 
-```
+```js
 module.exports = {
   "extends": [
     "standard"  
@@ -310,7 +310,7 @@ module.exports = {
 
 最后我们知道一条规则对应一种检查，那么eslint不可能提供所有的规则来覆盖我们的语法，这时候eslint提供了plugin，允许自定义plugin定义语法检查规则
 
-```
+```js
 module.exports = {
   "extends": [
     "standard"  

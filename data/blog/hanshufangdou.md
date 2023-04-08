@@ -3,7 +3,7 @@
   date: 2018-03-01T08:41:30Z
   lastmod: 2018-03-01T08:41:30Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "防抖"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

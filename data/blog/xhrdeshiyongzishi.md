@@ -3,7 +3,7 @@
   date: 2018-07-06T09:33:09Z
   lastmod: 2018-07-06T14:04:44Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "xhr"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

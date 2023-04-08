@@ -3,14 +3,14 @@
   date: 2021-07-26T12:34:20Z
   lastmod: 2021-07-26T12:34:36Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "yarn", "install", "--frozen-lockfile"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/yarn.png']
   bibliography: references-data.bib
 ---
 
-### 背景
+## 背景
 
 公司目前端统一使用的包管理工具是yarn，项目都是结合gitlab-ci来构建与发布，为了在gitlab-cli内能过顺利的构建成功，统一在dockfile内install的时候添加`--frozen-lockfile`参数，如下所示
 
@@ -40,7 +40,7 @@ Dockerfile:8
 error: failed to solve: rpc error: code = Unknown desc = executor failed running [/bin/sh -c npm config set registry https://registry.npm.taobao.org &&   yarn --frozen-lockfile --check-files --ignore-optional]: exit code: 1
 ```
 
-### 解决过程
+## 解决过程
 
 最开始关注的报错是这一行信息
 
@@ -72,7 +72,7 @@ If yarn.lock is absent, or is not enough to satisfy all the dependencies listed 
 
 所以结合起来就是yarn install的时候会判断当前项目是否存在yarn.lock文件，如果没有则install之后生成，如果有且有新的满足条件的依赖包，则安装新的满足条件的依赖包并更新yarn.lock文件；如果有且没有新的满足条件的依赖包则不安装新的依赖包且不更新yarn.lock文件；当我们install加上--frozen-lockfile参数的时候，就表示的yarn.lock内的依赖是不需要更新的，这就要求package.json内的依赖版本必须要与yarn.lock文件内的包依赖版本一致，如果不一致则会install失败，提示`error Your lockfile needs to be updated, but yarn was run with `--frozen-lockfile``
 
-### 总结
+## 总结
 
 1. 排查问题的时候一定要定位清楚，错误来源哪里
 2. `error Your lockfile needs to be updated`错误原因就是我们install的时候使用了--frozen-lockfile参数且手动改了package.json（比如"react":"^16.8.0"在package.json内将react版本手动改成"^16.10.0"），最后没有更新yarn.lock文件导致的报错

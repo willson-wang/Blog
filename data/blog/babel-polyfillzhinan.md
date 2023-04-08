@@ -3,7 +3,7 @@
   date: 2022-09-03T02:38:45Z
   lastmod: 2022-09-03T02:41:28Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "babel", "core-js", "polyfill"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/babel.jpeg']

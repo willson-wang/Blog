@@ -3,20 +3,20 @@
   date: 2019-11-24T07:11:31Z
   lastmod: 2023-03-25T04:08:35Z
   summary: 
-  tags: ["包管理工具"]
+  tags: ["包管理工具", "yarn", "npm"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/npm.png']
   bibliography: references-data.bib
 ---
 
-1. 创建package.json
+## 创建package.json
 
 | npm | yarn |
 |--   |   ---    |
 | npm init or npm init -y | yarn init or yarn init -y |
 
-2. 安装模块
+## 安装模块
 
 |npm | yarn |
 |--  | ---- |
@@ -28,7 +28,7 @@
 | npm i `@babel/{core,cli}` --save-dev  | yarn add `@babel/{core,cli}` --dev |
 | npm i npm-checked -g | yarn global add npm-checked |
 
-3. 卸载模块
+## 卸载模块
 
 | npm | yarn  |
 | --  | -- |
@@ -36,7 +36,7 @@
 | npm uninstall react react-dom prop-types | yarn remove react react-dom prop-types |
 | npm uninstall `@babel/{core,cli}`  | yarn remove `@babel/{core,cli}` |
 
-4. 获取安装包信息
+## 获取安装包信息
 
 | npm | yarn  |
 | --  | -- |
@@ -45,14 +45,14 @@
 | npm view react versions | yarn info react versions |
 | npm view react readme | yarn info react readme |
 
-5. 搜索安装包
+## 搜索安装包
 
 | npm | yarn  |
 | --  | -- |
 | 
 
 
-6. 依赖枚举
+## 依赖枚举
 
 | npm | yarn  |
 | --  | -- |
@@ -62,14 +62,14 @@
 | | yarn list --depth=0 --pattern="md5|webpack" |
 | npm ls -g --depth=0 |  |
 
-7. 查看最新依赖
+## 查看最新依赖
 
 | npm | yarn  |
 | --  | -- |
 | npm outdate | yarn outdated |
 | npm outdate qs | yarn outdated qs |
 
-8. 更新依赖
+## 更新依赖
 
 | npm | yarn  |
 | --  | -- |
@@ -79,7 +79,7 @@
 
 注意yarn upgrade不会更新package.json内依赖的版本号，解决方法可参考[issues](https://github.com/yarnpkg/yarn/issues/2042)
 
-9. 本地软链接
+## 本地软链接
 
 | npm | yarn  |
 | --  | -- |

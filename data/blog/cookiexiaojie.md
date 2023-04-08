@@ -3,7 +3,7 @@
   date: 2018-06-08T14:43:36Z
   lastmod: 2018-08-24T01:46:25Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "cookie"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib
@@ -127,6 +127,6 @@ axios.defaults.withCredentials = true;
     2. 由于服务器指定Cookie后，浏览器的每次请求都会携带Cookie数据，会带来额外的性能开销（尤其是在移动环境下）
 
 
-参考链接：
+参考链接
 https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies
 https://segmentfault.com/a/1190000004556040

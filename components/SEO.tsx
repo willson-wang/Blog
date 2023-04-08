@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import siteMetadata from '@/data/siteMetadata'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
+import summaryJson from '@/data/summary.json'
 interface CommonSEOProps {
   title: string
   description: string
@@ -15,6 +16,7 @@ interface CommonSEOProps {
       }[]
   twImage: string
   canonicalUrl?: string
+  tags?: string[]
 }
 
 const CommonSEO = ({
@@ -24,12 +26,14 @@ const CommonSEO = ({
   ogImage,
   twImage,
   canonicalUrl,
+  tags = [],
 }: CommonSEOProps) => {
   const router = useRouter()
   return (
     <Head>
       <title>{title}</title>
       <meta name="robots" content="follow, index" />
+      <meta name="keywords" content={`${tags.join(',')}`} />
       <meta name="description" content={description} />
       <meta property="og:url" content={`${siteMetadata.siteUrl}${router.asPath}`} />
       <meta property="og:type" content={ogType} />
@@ -112,6 +116,7 @@ export const BlogSEO = ({
   url,
   images = [],
   canonicalUrl,
+  tags,
 }: BlogSeoProps) => {
   const publishedAt = new Date(date).toISOString()
   const modifiedAt = new Date(lastmod || date).toISOString()
@@ -144,6 +149,8 @@ export const BlogSEO = ({
     }
   }
 
+  const newSummary = summary || (summaryJson[title] && summaryJson[title].summary)
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -164,20 +171,20 @@ export const BlogSEO = ({
         url: `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`,
       },
     },
-    description: summary,
+    description: newSummary,
   }
 
   const twImageUrl = featuredImages[0].url
-
   return (
     <>
       <CommonSEO
         title={title}
-        description={summary}
+        description={newSummary}
         ogType="article"
         ogImage={featuredImages}
         twImage={twImageUrl}
         canonicalUrl={canonicalUrl}
+        tags={tags}
       />
       <Head>
         {date && <meta property="article:published_time" content={publishedAt} />}

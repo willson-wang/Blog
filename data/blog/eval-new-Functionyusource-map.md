@@ -1,9 +1,9 @@
 ---
-  title: eval、new Function与source-map
+  title: new Function source-map
   date: 2022-07-09T08:12:56Z
   lastmod: 2022-07-09T08:14:13Z
   summary: 
-  tags: ["原生JS","浏览器"]
+  tags: ["原生JS","浏览器", "eval", "new Function", "source-map"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/js3.png']

@@ -3,7 +3,7 @@
   date: 2019-06-06T01:47:17Z
   lastmod: 2019-06-12T15:39:51Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "vue", "sentry"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/sentry.png']

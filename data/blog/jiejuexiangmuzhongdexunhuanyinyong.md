@@ -3,14 +3,14 @@
   date: 2020-04-23T11:39:48Z
   lastmod: 2020-04-23T12:00:08Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "webpack", "babel"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/js4.jpeg']
   bibliography: references-data.bib
 ---
 
-### 什么是循环引用
+## 什么是循环引用
 即a依赖b，b依赖c，c又依赖a这样的情况
 
 我们实际项目开发中一般使用的是es6+的语法及api,那么当我们项目越来越大的时候，就有可能出现循环引用；那么怎么去解决呢？
@@ -18,9 +18,9 @@
 第一个思路，提取新的方法，避免出现循环引用
 第二个思路，升级babel配置or使用函数声明而不是函数表达式，使用函数来包裹变量而不是单独使用变量
 
-#### 以实际开发项目webpack及bable版本及配置为例子
+## 以实际开发项目webpack及bable版本及配置为例子
 
-```
+```json
 package.json
 
 "devDependencies": {
@@ -44,7 +44,7 @@ package.json
   }
 ```
 
-```
+```js
 .babelrc
 
 {
@@ -64,9 +64,9 @@ package.json
 }
 ```
 
-#### 具体列子
+### 具体列子
 
-```
+```js
 // a.js
 import {bar} from './b';
 console.log('a.js');
@@ -80,9 +80,9 @@ console.log(foo);
 export let bar = 'bar';
 ```
 
-#### babel-loader webpack处理后的文件，注意这里为了方便观察，把devtool去掉，加上moduleId展示名称与路径webpack插件
+### babel-loader webpack处理后的文件，注意这里为了方便观察，把devtool去掉，加上moduleId展示名称与路径webpack插件
 
-```
+```js
 plugins: [
         new CleanWebpackPlugin(),
         new ExtractTextPlugin('[name]-[contenthash].css'),
@@ -91,7 +91,7 @@ plugins: [
 ],
 ```
 
-```
+```js
 /***/ "./src/a.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -124,21 +124,21 @@ var bar = 'bar';
 /***/ })
 ```
 
-#### 最终执行的结果：
+### 最终执行的结果：
 
-```
+```js
 b.js
 undefined
 a.js
 bar
 ```
 
-#### 小结：
+### 小结
 b.js内引入a.js内的foo，因为a.js最终转换之后变成var foo = 'foo'，然后通过__webpack_require__.d暴露出去，所以当我们在b.js内执行到console.log(foo)时，由于a.js内还没执行到var foo = 'foo'这一行，所以打印出的结果是undefiend
 
-#### 我们在a.js内加一个fn函数，一个expFn函数表达式，一个asyncFn async函数；
+### 我们在a.js内加一个fn函数，一个expFn函数表达式，一个asyncFn async函数；
 
-```
+```js
 // a.js 
 import { bar } from './b'
 console.log('a.js')
@@ -161,9 +161,9 @@ console.log(expFn)
 export let bar = 'bar'
 ```
 
-#### babel-loader webpack处理之后
+### babel-loader webpack处理之后
 
-```
+```js
 /***/ "./src/a.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -229,9 +229,9 @@ var bar = 'bar';
 /***/ })
 ```
 
-#### 最终打印结果
+### 最终打印结果
 
-```
+```js
 b.js
 undefined
 ƒ fn() {}
@@ -241,10 +241,10 @@ a.js
 bar
 ```
 
-#### 小结：
+### 小结
 分析：只有fn函数正确读取到了，其它foo变量、asyncFn、expFn打印出来的都是undefined；原因就在a.js经过babel处理之后，expFn与asyncFn变成了如下所示
 
-```
+```js
 var expFn = function expFn() {};
 
 var asyncFn = function () {
@@ -267,7 +267,7 @@ var asyncFn = function () {
 ```
 都变成了函数表达式，所以跟foo变量就是一样的结果了，b.js内代码执行的时候，a.js从加载b.js后的那些代码都没有被执行，所以最终结果都输出不正确；
 
-#### 我们现在可以总结：
+## 总结
 
 1. 变量、函数表达式会变成undefined、函数定义不会，可以正常被读取引用
 2. 在babel6.x且加入babel-pulgin-transform-runtime插件处理后的async函数会变成函数表达式；
@@ -276,7 +276,7 @@ var asyncFn = function () {
 
 升级babel到7.x版本之后，async函数转换成了函数声明，而不是函数表达式
 
-```
+```js
 function asyncFn() {
   return _asyncFn.apply(this, arguments);
 }
@@ -301,7 +301,7 @@ function _asyncFn() {
 
 webpack转换后的文件
 
-```
+```js
 // 暴露的函数声明
 /* harmony export (immutable) */ __webpack_exports__["fn"] = fn;
 

@@ -3,13 +3,13 @@
   date: 2019-05-21T09:28:48Z
   lastmod: 2019-05-21T10:08:40Z
   summary: 
-  tags: ["HTML5"]
+  tags: ["HTML5", "input", "布尔属性"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib
 ---
 
-###  记录一下布尔属性的赋值问题
+##  记录一下布尔属性的赋值问题
 
 ```
 基于angularjs开发
@@ -18,11 +18,11 @@
 <input type="text" name="username" readonly="data.isReadonly" />
 ```
 
-#### 当把readonly属性删除的时候，就变成可写了，奇怪，为什么readonly属性设置false会无效呢？
+当把readonly属性删除的时候，就变成可写了，奇怪，为什么readonly属性设置false会无效呢？
 
-#### 然后试了下checked属性及disabled属性，发现也是一样的效果，即checked="true"、checked=""、checked="false"、checked都是被选中；disabled="true"、disabled=""、disabled="false"、disabled都是被禁用；将checked、disabled的值设置为‘’及false居然不生效
+然后试了下checked属性及disabled属性，发现也是一样的效果，即checked="true"、checked=""、checked="false"、checked都是被选中；disabled="true"、disabled=""、disabled="false"、disabled都是被禁用；将checked、disabled的值设置为‘’及false居然不生效
 
-```
+```js
 <div>
   <input type="number"  />
   <!-- 这三种方式都是只读 -->
@@ -44,22 +44,22 @@
 </div>
 ```
 
-#### 最后查找资料知道这是布尔属性的特性决定的；
+最后查找资料知道这是布尔属性的特性决定的；
 
-#### 布尔属性：元素上存在布尔属性表示真值，缺少属性表示false值,布尔属性不允许使用值“true”和“false”。也就是说布尔属性是否生效跟属性的value值无关；
+布尔属性：元素上存在布尔属性表示真值，缺少属性表示false值,布尔属性不允许使用值“true”和“false”。也就是说布尔属性是否生效跟属性的value值无关；
 
 ![image](https://user-images.githubusercontent.com/20950813/58087559-5d0e5300-7bf3-11e9-9ad5-ce8ec2ce9882.png)
 
 
-#### 所以如果要想最开始的布尔属性生效，我们需要如下写法，即采用框架提供的指令来书写
+所以如果要想最开始的布尔属性生效，我们需要如下写法，即采用框架提供的指令来书写
 ```
 <input type="text" name="username" ng-readonly="data.isReadonly" />
 ```
 
-#### 那么框架内部对布尔属性是怎么处理的呢？以jquery跟vue为例
+## 框架内部对布尔属性的处理
 
-#### jquery
-```
+### jquery
+```js
 设置布尔属性：$('input').attr('readonly', true)
 取消布尔属性：$('input').attr('readonly', false)
 
@@ -118,8 +118,8 @@ var boolHook = {
 }
 ```
 
-#### vue
-```
+### vue
+```js
 function setAttr (el: Element, key: string, value: any) {
   debugger
   if (el.tagName.indexOf('-') > -1) {
@@ -167,11 +167,11 @@ export const isFalsyAttrValue = (val: any): boolean => {
 }
 ```
 
-#### 通过vue及jquery的处理方式不难看出其它框架，都是对布尔属性做了特殊处理；
+通过vue及jquery的处理方式不难看出其它框架，都是对布尔属性做了特殊处理；
 
-#### 总结：
+## 总结：
 1. 布尔属性是否生效跟属性的value值无关；只跟是否存在该属性有关；
-```
+```js
 即<input readonly>, 
 <input readonly=''>, 
 <input readonly="readonly">，

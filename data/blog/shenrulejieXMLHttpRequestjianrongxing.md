@@ -3,7 +3,7 @@
   date: 2020-02-19T14:56:27Z
   lastmod: 2020-02-29T09:19:21Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "XMLHttpRequest", "兼容性"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/js3.png']
@@ -29,9 +29,11 @@ XDomainRequest 兼容ie9中XMLHttpRequest不支持CORS的场景；但是XDomainR
 
 whatwg-fetch目前作为fetch的常用polyfill库，最新版本兼容性ie10+起
 
+## axios源码
+
 然后我们看下axios兼容ie9的版本,如0.18.0，只保留关键代码
 
-```
+```js
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     var requestData = config.data;
@@ -146,6 +148,8 @@ module.exports = function xhrAdapter(config) {
 };
 ```
 
+## wathwg-fetch源码
+
 在看下wathwg-fetch的0.11.1源码，只保留关键代码
 
 ```
@@ -199,7 +203,7 @@ self.fetch = function(input, init) {
   }
 ```
 
-### 总结：
+## 总结
 
 1. XMLHttpRequest的兼容性ie9+，但是ie9下不支持CORS
 

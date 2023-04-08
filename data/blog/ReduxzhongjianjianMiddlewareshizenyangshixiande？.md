@@ -1,9 +1,9 @@
 ---
-  title: Redux中间件Middleware是怎样实现的？
+  title: Redux中间件原理
   date: 2021-06-08T11:07:10Z
   lastmod: 2023-03-26T08:45:01Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "redux", "中间件", "原理"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/react_redux.png']
@@ -22,7 +22,7 @@ redux 的 middleware 是为了增强 dispatch 而出现的
 
 我首先想到的是redux-thunk，因为这个最简单，也最好理解，它是怎么做到支持传入disptach方法的参数可以是函数，然后看了下源码实现，只有短短几行代码，如下所示
 
-```
+```js
 function createThunkMiddleware(extraArgument) {
   return ({ dispatch, getState }) => (next) => (action) => {
     if (typeof action === 'function') {
@@ -41,7 +41,7 @@ export default thunk;
 
 实现逻辑就是对传入的action做判断，如果传入的action是函数，则调用action，把dispatch、getState在传入到action函数内，方便action函数内处理完副作用之后，可以执行dispatch，也可以通过getState获取到最新的store内容
 
-```
+```js
 action.js 
 // 获取用户信息
 export function getUserInfo(params) {
@@ -87,7 +87,7 @@ if (typeof action === 'function') {
 
 先看下redux中间件的书写及调用方式，以redux-thunk为例
 
-```
+```js
 redux-tunk.js
 function createThunkMiddleware(extraArgument) {
   return ({ dispatch, getState }) => (next) => (action) => {
@@ -118,7 +118,7 @@ return store
 
 看下applyMiddleware的源码实现
 
-```
+```js
 export default function applyMiddleware(
   ...middlewares
 ){
@@ -154,7 +154,7 @@ applyMiddleware接受一个middlewares数组，然后返回一个函数，这个
 
 然后我们在看下
 
-```
+```js
 createStore(createReducer(), preloadState, middlewareEnhancer)
 
 redux.js
@@ -179,7 +179,7 @@ function createStore(reducer, preloadedState, enhancer) {
 回过头来看这里
 
 我们在项目代码内调用
-```
+```js
 const store = createStore(createReducer(), preloadState, middlewareEnhancer)
 return store
 
@@ -195,7 +195,7 @@ return {
 ```
 
 然后我们细看下applyMiddleware方法内的实现
-```
+```js
 const store = createStore(reducer, preloadedState)
 let dispatch = () => {
 	throw new Error(
@@ -221,7 +221,7 @@ return {
 ```
 
 加入我们传入三个中间件fn1, fn2,fn3先看下chain得到的是什么
-```
+```js
 middlewares数组应该是这样的 [ // 三层函数的中间件
 	({getState, dispatch}) => next1 => action => next1(action), 
 	({getState, dispatch}) => next2 => action => next2(action),
@@ -238,7 +238,7 @@ const chain = middlewares.map(middleware => middleware(middlewareAPI))
 ```
 
 我们看下compose的实现
-```
+```js
 const compose = (...fns) => {
 	if (!fns.length) {
 		return (arg) => arg
@@ -258,7 +258,7 @@ const compose = (...fns) => {
 `compose(fn1, fn2, fn3) =>` 最终返回的事一个函数 `(...args) => {return a(b(...args))}`
 
 我们用个例子来试下
-```
+```js
 function fn1(...args) {
 	console.log('fn1', ...args)
 	return 1
@@ -334,7 +334,7 @@ dispatch = action => next1(action) (也就是fn1的返回值)
 实际上将每个fn函数都执行一边，第一个执行的函数，也就是最右边的函数，会接受到一个store.dispatch函数，后面的函数接受到的都是上一个函数执行的返回结果
 
 我们看下洋葱模型，定义三个中间件logger1、logger2、logger3
-```
+```js
 function logger1(...args) { // 这一层函数的目的，可以帮助中间件定义的时候传入一些自定义参数
     return function({dispatch, getState}) { // 这一层函数的目的是，接受getState,dispatch函数，可以拿到store内容，并做一些操作
         return function (next) { // 接受store.dispatch参数或者下一个中间件的返回函数
@@ -421,7 +421,7 @@ newDispatch({
 ![image](https://user-images.githubusercontent.com/20950813/121174526-96729380-c88c-11eb-8e15-dd362d64d9cd.png)
 
 到这里我们已经知道，redux的中间件是怎么去设计的了，同时也知道中间件为什么需要定义4层函数，同时我们在看之前的一个细节
-```
+```js
 // 这里定义了一次dispatch函数
 let dispatch: Dispatch = () => {
 	throw new Error(

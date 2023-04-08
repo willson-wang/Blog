@@ -3,7 +3,7 @@
   date: 2018-12-12T14:58:42Z
   lastmod: 2018-12-12T15:16:53Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "iframe", "postMessage", "跨域", "cookie"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

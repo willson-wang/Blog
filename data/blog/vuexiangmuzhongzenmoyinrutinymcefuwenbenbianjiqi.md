@@ -3,7 +3,7 @@
   date: 2018-01-24T12:53:45Z
   lastmod: 2018-02-28T08:43:22Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "vue"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

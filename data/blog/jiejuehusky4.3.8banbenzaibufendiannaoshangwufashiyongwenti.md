@@ -1,16 +1,16 @@
 ---
-  title: 解决husky4.3.8版本在部分电脑上无法使用问题
+  title: 解决husky 4.x 在部分电脑上无法使用问题
   date: 2022-04-05T02:47:28Z
   lastmod: 2022-04-05T02:47:46Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "husky"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/husky.jpeg']
   bibliography: references-data.bib
 ---
 
-# 目录
+## 目录
 
 - [背景](#背景)
 - [husky4.3.8源码分析](#husky4.3.8源码分析)
@@ -18,7 +18,7 @@
 - [husky执行命令实现](#husky执行命令实现)
 - [总结](#总结)
 
-### 背景
+## 背景
 基于react开发了一套通用模版，在模版内集成了，通用的eslint、prettier等规则，结合huksy+lintstaged来做代码质量与规范的检查，husky选用的是4.3.8版本，package.json如下图所示；
 
 ```json
@@ -68,7 +68,7 @@
 
 但是在部分同事的电脑上，install之后，huksy没有初始化成功，也没有错误提示，导致无法正常使用husky的功能，为了彻底解决这个问题，决定去看一下husky的内部实现
 
-### husky4.3.8源码分析
+## husky4.3.8源码分析
 
 husky是在install的时候，往.git/hooks目录下注入对应的commit钩子，那么先看package.json
 
@@ -87,7 +87,7 @@ husky是在install的时候，往.git/hooks目录下注入对应的commit钩子�
 
 检查git版本 => 从环境变量INIT_CWD中获取到当前工作目录 => 创建各种git hook => 创建husky.local.sh 与 husky.sh 用于具体执行huksy命令的脚本
 
-#### 初始化准备工作
+### 初始化准备工作
 ```js
 // lib/installer/bin.js
 
@@ -157,7 +157,7 @@ function checkGitVersion() {
 1. checkGitVersion内的git版本检查，husky 4.3.8版本要求git版本必须大于等于2.13.0；
 1. 无法从环境变量process.env中获取INIT_CWD参数
 
-#### 创建hook
+### 创建hook
 当满足上述条件之后，就会执行对应的install or unstall方法
 
 ```js
@@ -215,7 +215,7 @@ install成功之后，我们可以在.git/hooks内看到生成的hook，如下�
 
 到这里我们基本已经知道为什么部分电脑husky不生效，原因主要就是git版本低于指定的2.13.0版本，还有就是无法从环境变量中获取到INIT_CWD
 
-### 排查错误并手动执行install
+## 排查错误并手动执行install
 ```jsx
 const { execSync } = require('child_process');
 
@@ -252,7 +252,7 @@ execSync(lastCommand, {
 这里把husky内的debug日志开启，便于排查问题
 所以当我们提示的是git版本低于要求版本时，则可以通过升级git版本来解决该问题
 
-### husky执行命令实现
+## husky执行命令实现
 
 ```jsx
 function runCommand(cwd, hookName, cmd, env) {
@@ -284,7 +284,7 @@ function runCommand(cwd, hookName, cmd, env) {
 ```
 通过shell方式执行，然后通过status来判断成功还是失败，所以如果我们自己自定义了一些工具，那么如果需要借助huksy来执行，出现错误的场景，一定需要通过process.exit(code)把code向上传递出来
 
-### 总结
+## 总结
 
 husky的runCommand执行方式值得我们在写类似工具时借鉴一二，另外就是为什么我们在install的时候，husky如果初始化失败，为什么没有中断整个install流程？后续有时间在去了解下这里
 

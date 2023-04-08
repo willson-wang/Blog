@@ -3,7 +3,7 @@
   date: 2018-11-10T14:04:23Z
   lastmod: 2018-11-11T14:01:35Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "eslint", "husky", "lint-staged", "代码检查"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

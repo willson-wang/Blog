@@ -3,23 +3,26 @@
   date: 2021-01-03T10:55:26Z
   lastmod: 2021-01-03T10:56:56Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "webpack", "webpack.DefinePlugin"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/webpack5.jpeg']
   bibliography: references-data.bib
 ---
 
-### 一直有一个疑问，我们在使用webpack构建前端静态资源的时候，我们既然已经设置了node的环境变量NODE_ENV，为什么webpack打包的时候还需要去使用webpack.DefinePlugin这个插件再去定义'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),或者其它的环境变量，如下所示
+## 为什么需要webpack.DefinePlugin
+一直有一个疑问，我们在使用webpack构建前端静态资源的时候，我们既然已经设置了node的环境变量NODE_ENV，为什么webpack打包的时候还需要去使用webpack.DefinePlugin这个插件再去定义'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),或者其它的环境变量，如下所示
 
-```
+```json
 {
     // packages.json 在scripts内设置了环境变量NODE_ENV
     "scripts": {
         "build": "NODE_ENV=production&& webpack --config ./webpack.config.js"
     },
 }
+```
 
+```js
 module.exports = {
     mode: 'none', // development | production
     entry: {
@@ -43,7 +46,7 @@ module.exports = {
 
 方式一：通过scripts脚本设置
 
-```
+```json
 {
     // packages.json 在scripts内设置了环境变量NODE_ENV
     "scripts": {
@@ -53,12 +56,12 @@ module.exports = {
 ```
 
 方式二：webpack.production.js内添加添加NODE_ENV的值
-```
+```js
 process.env.NODE_ENV === 'production'
 ```
 
 方式三： 直接设置全局的NODE_ENV环境变量
-```
+```shell
 set NODE_ENV = 'production'
 ```
 
@@ -66,7 +69,7 @@ set NODE_ENV = 'production'
 
 场景一：webpack.config.js内
 
-```
+```js
 module.exports = function(merge) {
     if (process.env.NODE_ENV === 'development') {
         return merge({}, config, require('./dev'))
@@ -76,7 +79,7 @@ module.exports = function(merge) {
 ```
 
 场景二：我们的项目入口文件app.js内
-```
+```js
 if (process.env.NODE_ENV !== 'production') {
     console.log('debug')
 }
@@ -89,7 +92,7 @@ if (process.env.TARO_ENV === 'h5') {
 
 带着这些疑问,开一个新的demo去验证下
 
-```
+```js
 // webpack.config.js
 module.exports = {
     mode: 'none', // development | production
@@ -109,7 +112,7 @@ console.log('process.env.TARO_ENV', process.env.TARO_ENV)
 console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 ```
 
-```
+```js
 // app.js
 
 console.log('process.env', process.env)
@@ -117,7 +120,7 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 console.log('process.env.TARO_ENV', process.env.TARO_ENV)
 ```
 
-```
+```json
 {
     "scripts": {
         "build": "webpack --config ./webpack.config.js"
@@ -143,7 +146,7 @@ node端webpack.config.js内的输出，如下图所示
 
 修改package.json内的scripts命令,设置环境变量
 
-```
+```json
 {
     "scripts": {
         "build": "NODE_ENV=production TARO_ENV=h5 webpack --config ./webpack.config.js"
@@ -163,7 +166,7 @@ node端webpack.config.js内的输出，如下图所示
 
 在webpack.config.js内添加new webpack.DefinePlugin插件，如下所示
 
-```
+```js
 module.exports = {
     ...
     plugins: [
@@ -185,7 +188,7 @@ module.exports = {
 
 修改app.js
 
-```
+```js
 // 添加如下代码
 if (process.env.NODE_ENV === 'production') {
     console.log('当前是production环境')
@@ -214,13 +217,13 @@ production模式下的构建结果
 
 production模式下去掉了false内的代码
 
-### 对构建时使用环境变量的理解
+## 对构建时使用环境变量的理解
 
 首先我们先得知道前端打包的时候，webpack配置文件内为什么需要用到环境变量
 
 原因是：我们前端构建的资源是需要区分不同环境的（比如开发环境、测试环境、预发布环境、生成环境等），我们可以通过一个node的环境变量，来决定使用哪一份配置，而NODE_ENV只是行业内默认的区分当前环境的变量名
 
-```
+```js
 module.exports = function(merge) {
     if (process.env.NODE_ENV === 'development') {
         return merge({}, config, require('./dev'))
@@ -233,7 +236,7 @@ module.exports = function(merge) {
 
 原因是：我们可以根据环境变量，来决定运行哪块代码，可以增加不同环境的区分，同时可以去掉无用的代码
 
-```
+```js
 // app.js
 if (process.env.NODE_ENV !== 'production') {
     console.log('debug')
@@ -252,7 +255,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 最后我们在webpack.config.js内通过webpack.DefinePlugin()插件定义变量时，又不想写死，所以就又通过了node的环境变量来输入值
 
-```
+```js
 // 由写死
 new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('production'),
@@ -268,11 +271,11 @@ new webpack.DefinePlugin({
 })
 ```
 
-### cross-env的作用是什么
+## cross-env的作用是什么
 
 我们在实际开发中，一般不会将NODE_ENV这个环境变量直接设置成全局的环境变量，如果设置成全局的环境变量，则每次打包构建的时候去注意当前的NODE_ENV的值，所以我们更多的还是结合package.json内的scripts一起使用，如果所示
 
-```
+```json
 {
     "scripts": {
         // mac下设置一个环境变量
@@ -293,7 +296,7 @@ new webpack.DefinePlugin({
 
 实际开发的时候就会发现windows与mac下，在scripts命令行内设置node环境变量的方式是有区别的，那么这时候我们需要有一个可以帮助我们抹平平台差异设置环境变量的一个库，那cross-env就是一个这样的库，我们直接通过cross-env来帮助我们跨平台设置node环境变量，如下图所示
 
-```
+```json
 {
   "scripts": {
     // 设置当个环境变量

@@ -3,7 +3,7 @@
   date: 2020-11-10T12:14:37Z
   lastmod: 2020-11-10T12:15:02Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "react", "Immutable"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/react.png']
@@ -12,7 +12,7 @@
 
 首先看个例子
 
-```
+```js
 initState = {
     name: 'jack',
     page: {
@@ -45,7 +45,7 @@ const reducer = (state, action) => {
 
 思考一下redux规定reducer要是一个纯函数，即reducer不能直接更改传入的state对象，而是需要重新返回一个新的state对象，这是为什么？
 
-### 可变数据
+## 可变数据
 
 什么是可变数据(mutable)即一个数据被创建之后，可以随时进行修改，修改之后会影响到原值，那么javascript中有没有这种可变数据，有
 
@@ -59,7 +59,7 @@ null、undefined、string、number、boolean、symbol都是不可变数据
 
 object一般是可变数据，原因是javascript的对象使用了引用赋值，新的对象简单的引用了原始对象，改变新的对象将影响到原始对象，例如
 
-```
+```js
 const obj = {a: 1}
 
 const obj2 = obj
@@ -72,7 +72,7 @@ obj2.a = 2
 
 这样做的好处可以节约内存，但是在一些不需要这种引用赋值的场景下，而是需要一个一摸一样的object的场景，于是有了浅拷贝与深拷贝，浅拷贝与简单的深拷贝如下所示
 
-```
+```js
 // 浅拷贝,浅拷贝，只能拷贝对象的第一层属性
 Object.assign({}, obj)
 
@@ -82,11 +82,11 @@ JSON.parse(JSON.stringify(obj))
 
 在一些嵌套层级过多的对象上，浅拷贝明显不适用，这时候我们就需要进行深拷贝，一般都是递归实现深拷贝，实现深拷贝的时候需要考虑基本类型、引用类型，循环引用等问题
 
-### 不可变数据
+## 不可变数据
 
 不可变数据(Immutable) 就是一旦创建，就不能再被更改的数据。对Immutable对象的任何修改或添加删除操作都会返回一个新的 Immutable对象。如下所示
 
-```
+```js
 const obj = {a: 1}
 
 const obj2 = f(obj, (draft) => {
@@ -129,9 +129,9 @@ Immutable.js 使用了Structure Sharing会尽量复用内存。没有被引用�
 Immutable 本身就是函数式编程中的概念，纯函数式编程比面向对象更适用于前端开发。因为只要输入一致，输出必然一致，这样开发的组件更易于调试和组装。
 
 
-### 不可变数据的几种实现方式
+## 不可变数据的几种实现方式
 
-```
+```js
 // 原始写法
 let foo = {a: {b: 1}};
 let bar = foo;
@@ -140,7 +140,7 @@ console.log(foo.a.b);  // 打印 2
 console.log(foo === bar);  //  打印 true
 ```
 
-```
+```js
 // 不借助第三方库，使用解构写法
 let bar = (function (obj) {
     return {
@@ -156,7 +156,7 @@ console.log(foo.a.b);  // 打印 2
 console.log(foo === bar);  //  打印 false
 ```
 
-```
+```js
 // 使用 immutable.js
 import Immutable from 'immutable';
 foo = Immutable.fromJS({a: {b: 1}});
@@ -165,7 +165,7 @@ console.log(foo.getIn(['a', 'b']));  // 使用 getIn 取值，打印 1
 console.log(foo === bar);  //  打印 false
 ```
 
-```
+```js
 // 使用immer.js
 // foo 原始对象，draftState是foo对象的副本，所有针对draftState的操作最终都会生成一个新的对象
 produce(foo, draftState => {
@@ -178,7 +178,7 @@ console.log(foo === bar);  //  打印 false
 
 更多的使用方式请直接参考文档
 
-### 不可变数据在项目中运用
+## 不可变数据在项目中运用
 
 react项目中有两个地方用到了不可变数据
 
@@ -189,7 +189,7 @@ react项目中有两个地方用到了不可变数据
 先从redux的使用上来说
 
 先看我们的reducer的定义，这个也是最上面的那个例子
-```
+```js
 initState = {
     name: 'jack',
     page: {
@@ -249,7 +249,7 @@ const reducer = (state, action) => {
 
 这是因为对同一个对象的两个引用总是相同的，不管此对象的值有没有改变，它们都是同一个对象的引用。因此，以下这段代码总会返回 true
 
-```
+```js
 function mutateObj(obj) {
   obj.key = 'newValue'
   return obj
@@ -270,7 +270,7 @@ param 与 returnValue 的浅比较只是检查了这两个对象是否为相同�
 
 如immer帮忙我们生成不可以数据，能够减少代码的书写量及可读性
 
-```
+```js
 // 写法一
 const reducer = (state, action) => {
     switch(action.type) {
@@ -292,7 +292,7 @@ const reducer = produce((draft, action) => {
 
 在说setState的使用上，在react中规定state的变更如果要引起视图更新的话一定要显示的调用setState方法，并传入state；而setState只会做一层state属性的合并，也就是说如果一层属性是一个对象，那么我们想要改这个对象内的某个值时，必须要把这个对象的其它属性也添加进去，不然其它属性会丢失，如下所示
 
-```
+```js
 state = {
     name: 'jack',
     page: {
@@ -314,7 +314,7 @@ handleChange = () => {
 
 这个还只有一层，可能我们使用解构很好处理，当有多层的时候，代码将如下所示
 
-```
+```js
 this.setState({
     page: {
         ...this.state.page,
@@ -331,7 +331,7 @@ this.setState({
 
 换成immer来帮我们处理不可变数据
 
-```
+```js
 // 注意这里的address、current、page都会生成新的对象，其它属性保持不变，这样可以最大程度，避免依赖了其它引用类型属性的组件触发重新渲染，我们可以在子组件做一层判断
 this.setState(produce(draft => {
     // 代码瞬间清爽，也易读，知道我们修改了某某某下面的某个属性值
@@ -341,11 +341,11 @@ this.setState(produce(draft => {
 
 但是从这里我们可以看出来，其实对于setState这个方法，它不关系传入的的state对象是不是一个可变数据，但是，我们可以利用不可变数据来进行性能优化，我们可以通过SCU或者子组件嵌套一层memo来做优化
 
-### 总结
+## 总结
 
 Immutable可以给应用带来极大的性能提升，但是我们还是需要根据实际项目决定，是否需要引入不可变数据库来帮助我们生成不可变数据；目前项目内推荐使用immer来帮助我们生成不可变数据，理由是操作简单，不需要学习新的数据解构及大量api
 
-### 参考链接
+## 参考链接
 
 [immer.js](https://github.com/immerjs/immer)
 [immutable.js](https://github.com/immutable-js/immutable-js)

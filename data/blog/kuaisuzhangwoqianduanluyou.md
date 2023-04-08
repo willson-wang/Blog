@@ -1,20 +1,20 @@
 ---
-  title: 快速掌握前端路由
+  title: 前端路由原理
   date: 2020-08-09T03:56:49Z
   lastmod: 2020-08-09T03:57:35Z
   summary: 
-  tags: ["浏览器"]
+  tags: ["浏览器", "前端路由"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/js3.png']
   bibliography: references-data.bib
 ---
 
-<h3>什么是web路由？</h3>
+## 什么是web路由？
 
 在web开发中，“route”是指根据url分配到对应的处理程序。更通俗一点就是route就是URL到函数的映射
 
-<h3>什么又是前端路由？</h3>
+## 什么又是前端路由？
 
 在早期的web应用中，每个url都对应一个后端的路由，这意味着，跳转到不同的页面都需要与服务端进行一次交互，也就是说一个web应用一般都是多页面的；
 
@@ -32,17 +32,17 @@
 为此浏览器提供了两种改变url，但是不会去请求服务器的方式，分别是hash值的变化及history对象提供的pushState及replaceState方法
 
 
-<h3>hash路由</h3>
+## hash路由
 
 最早的前端路由方案，可以看成是一种hack方案，因为hash值最早就是用来做锚标记的，只是后面spa流行之后才被用作前端路由
 
-```
+```js
 https://github.com/willson-wang/Blog?a=1#test
 ```
 
 主要用到的API
 
-```
+```js
 const currentHash = window.location.hash // 获取当前hash值
 
 window.location.hash = '#test' // 设置新的hash值
@@ -56,7 +56,7 @@ window.addEventListener('hashchange', () => {}) // 监听hash值的变化
 
 具体例子如下所示
 
-```
+```js
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -151,11 +151,11 @@ window.addEventListener('hashchange', () => {}) // 监听hash值的变化
 </html>
 ```
 
-<h3>history路由</h3>
+## history路由
 
 随着前端的spa越来越流行之后，开发者们已经不满足于通过hash的这种前端路由方式，因为url上的#无法去掉，导致url看起来很丑，会导致锚点功能失效，相同 hash 值不会触发动作将记录加入到历史栈中，为了提供更好的体验，html5拓展了history对象，提供了新的api history.pushState() 和 history.replaceState() 方法，它们分别可以添加和修改历史记录条目
 
-```
+```js
 // state：合法的 Javascript 对象，可以用在 popstate 事件中
 // title：现在大多浏览器忽略这个参数，可以直接用 null 代替
 // url：任意有效的 URL，用于更新浏览器的地址栏
@@ -177,7 +177,7 @@ pushState与replaceState方法的唯一区别就是，pushState是向history记�
 
 具体例子如下所示
 
-```
+```js
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -286,7 +286,7 @@ pushState与replaceState方法的唯一区别就是，pushState是向history记�
 </html>
 ```
 
-<h3>最后我们写一个通用一点的Router类</h3>
+## 最后我们写一个通用一点的Router类
 
 需要具备以下功能
 
@@ -297,7 +297,7 @@ pushState与replaceState方法的唯一区别就是，pushState是向history记�
 
 整个例子只是一个思路，如果需要用于生产，需要去完善各种边界条件及支持更多的场景
 
-```
+```js
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -681,10 +681,11 @@ pushState与replaceState方法的唯一区别就是，pushState是向history记�
 ```
 
 
-总结：
-	前端路由只要把握两个点：1. 提供方法改变url而不会向服务端发起请求；2. 有方法能够监听url的变化；就已经知道前端路由具体是什么了；其它的都是结合各自的前端框架，写出符合当前框架的前端路由
+## 总结
+前端路由只要把握两个点：1. 提供方法改变url而不会向服务端发起请求；2. 有方法能够监听url的变化；就已经知道前端路由具体是什么了；其它的都是结合各自的前端框架，写出符合当前框架的前端路由
 
 参考链接：
+
 [前端进阶彻底弄懂前端路由](https://juejin.im/post/6844903890278694919)
 [History API](https://developer.mozilla.org/zh-CN/docs/Web/API/History_API)
 [vue-router](https://github.com/vuejs/vue-router)

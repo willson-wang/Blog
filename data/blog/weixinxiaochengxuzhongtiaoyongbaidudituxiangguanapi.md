@@ -3,14 +3,14 @@
   date: 2019-07-05T14:57:31Z
   lastmod: 2019-11-17T01:55:55Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "微信小程序", "百度地图"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/weixin.jpeg']
   bibliography: references-data.bib
 ---
 
-```
+```js
 class BMapWX {
 
     /**
@@ -395,7 +395,7 @@ class BMapWX {
 export default BMapWX
 ```
 
-```
+```js
 staticMapImage() {
             if (!this.BmapWx) {
                 this.BmapWx = new BMapWX({
@@ -417,7 +417,7 @@ staticMapImage() {
         },
 ```
 
-```
+```js
 searchMinInMap(index = 0) {
             this.actNav = +index
             if (!this.mapCenter.lng) return

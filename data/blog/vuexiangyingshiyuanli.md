@@ -3,7 +3,7 @@
   date: 2018-01-27T06:33:02Z
   lastmod: 2018-02-28T03:10:15Z
   summary: 
-  tags: ["前端框架"]
+  tags: ["前端框架", "vue", "响应式", "原理"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

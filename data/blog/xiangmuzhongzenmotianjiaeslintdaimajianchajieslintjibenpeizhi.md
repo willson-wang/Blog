@@ -3,7 +3,7 @@
   date: 2017-12-11T09:32:30Z
   lastmod: 2017-12-11T09:40:31Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "eslint"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib

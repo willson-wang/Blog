@@ -1,9 +1,9 @@
 ---
-  title: webpack4+ Tree shaking原理
+  title: webpack Tree shaking原理
   date: 2022-09-03T03:13:02Z
   lastmod: 2022-09-03T03:13:58Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "webpack", "Tree shaking"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/webpack3.jpeg']
@@ -1156,7 +1156,7 @@ module.exports = class AddSideEffectsPlugin {
 `sideEffects: false` 标记的作用就是告诉`webpack` 当前项目 or `npm`包内的模块是没有副作用的，就是有副作用，也当成没有副作用处理
 
 
-参考链接
+# 参考链接
 [Everything you never wanted to know about side effects](https://sgom.es/posts/2020-06-15-everything-you-never-wanted-to-know-about-side-effects/)
 [What Does Webpack 4 Expect From A Package With sideEffects: false](https://stackoverflow.com/questions/49160752/what-does-webpack-4-expect-from-a-package-with-sideeffects-false)
 [Tree Shaking](https://webpack.js.org/guides/tree-shaking/#root)

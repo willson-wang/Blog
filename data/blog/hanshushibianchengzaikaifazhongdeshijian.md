@@ -3,7 +3,7 @@
   date: 2019-04-11T12:04:20Z
   lastmod: 2019-07-23T13:52:52Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "函数式编程"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib
@@ -13,9 +13,9 @@
 常用的基础及高阶函数，数组：forEach、map、filter、reduce；函数：debounce、compose、curry、partial
 纯函数、引用透明、不可变数据
 
-### 场景一：根据某个状态值筛选列表
+## 场景一：根据某个状态值筛选列表
 
-```
+```js
 const list = [
     {
         type: 1,
@@ -223,9 +223,9 @@ const res14 = getList(and(compose(pickFlag, isFlagTrue), compose(pickType2, isTy
 const res15 = getList(and(compose(pickFlag, isFlagTrue), compose(pickType2, or(isType1, isType3))))
 ```
 
-### 场景二:  ajax请求添加loading、alert等各种交互效果
+## 场景二:  ajax请求添加loading、alert等各种交互效果
 
-```
+```js
 async function loading(promise) {
     try {
         if (!isDesignTime) {
@@ -322,8 +322,8 @@ export default {
 this.getBrokerInfo()
 ```
 
-### 场景三：根据接口的值，渲染数据
-```
+## 场景三：根据接口的值，渲染数据
+```js
 var app = (tags) => {
     let url = `http://api.flickr.com/services/feeds/photos_public.gne?tags=${tags}&format=json&jsoncallback=?`;
     $.getJSON(url, (data) => {
@@ -437,8 +437,8 @@ const app5 = compose(getJSONCallBack, url)
 app5('cats')
 ```
 
-### 场景四：对数组内的每个元素进行处理
-```
+## 场景四：对数组内的每个元素进行处理
+```js
 let items = ['a', 'b', 'c'];
 let upperCaseItems = () => {
     let arr = [];
@@ -457,9 +457,9 @@ const upperCaseItems1 = (items) => {
 const result = upperCaseItems1(items)
 ```
 
-### 场景五：从localstorage内取值，并赋值
+## 场景五：从localstorage内取值，并赋值
 
-```
+```js
 function showStudent(id, elementId) {
     // 这里假如是同步查询
     var student = localStorage.getItem(id)

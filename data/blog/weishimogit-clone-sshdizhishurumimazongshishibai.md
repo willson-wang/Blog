@@ -3,14 +3,14 @@
   date: 2022-02-22T04:17:15Z
   lastmod: 2022-02-22T04:18:02Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "git"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/git3.png']
   bibliography: references-data.bib
 ---
 
-# 目录
+## 目录
 
 - [背景](背景)
 - [ssh与https的区别](ssh与https的区别)
@@ -19,7 +19,7 @@
 
 
 
-### 背景
+## 背景
 
 公司自研了脚手架，用于项目的快速创建，基于架构设计，模版与脚手架是分离的，模版物料库放置在一个单独的`gitlab`仓库，而脚手架内通过`git clone`的方式将物料库中的模版clone下来，生产最终的模版项目
 
@@ -53,7 +53,7 @@ ssh -T git@对应的gitlab地址
 
 
 
-### SSH与HTTPS的区别
+## SSH与HTTPS的区别
 
 git可以使用四种主要的协议来传输内容: 本地协议（Local），HTTP 协议，SSH（Secure Shell）协议及 git 协议。其中，本地协议由于目前大都是进行远程开发和共享代码所以一般不常用，而git协议由于缺乏授权机制且较难架设所以也不常用
 
@@ -63,7 +63,7 @@ git可以使用四种主要的协议来传输内容: 本地协议（Local），H
 
 
 
-#### HTTPS优缺点
+### HTTPS优缺点
 
 - 优点1: HTTPS 更简单，只需要输入用户名与密码就可以进行代码的clone、push、pull
 - 优点2: 不需要为多个不同的git服务，配置不同的ssh key
@@ -72,7 +72,7 @@ git可以使用四种主要的协议来传输内容: 本地协议（Local），H
 
 
 
-#### SSH的优缺点
+### SSH的优缺点
 
 - 优点1: 架设 Git 服务器时常用 SSH 协议作为传输协议。 因为大多数环境下已经支持通过 SSH 访问 
 
@@ -82,7 +82,7 @@ git可以使用四种主要的协议来传输内容: 本地协议（Local），H
 
 
 
-### SSH原理与运用
+## SSH原理与运用
 
 
 
@@ -269,7 +269,7 @@ git config user.email 'xxx@xxx.com'
 
 
 
-### 总结
+## 总结
 
 追求简单，推荐使用HTTPS方式，只需要输入账号密码即可
 

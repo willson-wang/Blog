@@ -3,7 +3,7 @@
   date: 2017-12-14T13:55:43Z
   lastmod: 2017-12-14T13:57:36Z
   summary: 
-  tags: ["CSS"]
+  tags: ["CSS", "border-radius"]
   draft: false
   layout: PostLayout
   bibliography: references-data.bib
@@ -43,6 +43,6 @@ border-radius **CSS3**属性，兼容ie9+及现代浏览器，共有2个属性�
 
 **总结:理解一点一个元素总共可以设置4个圆角，而一个圆角是需要两个值来进行设置的**
 
-**参考链接**
+参考链接
 https://developer.mozilla.org/zh-CN/docs/Web/CSS/border-radius
 

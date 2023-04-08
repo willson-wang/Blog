@@ -3,14 +3,14 @@
   date: 2019-09-12T09:53:48Z
   lastmod: 2019-11-17T01:50:56Z
   summary: 
-  tags: ["开发工具"]
+  tags: ["开发工具", "ast", "estree", "parser"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/ast.jpeg']
   bibliography: references-data.bib
 ---
 
-# 目录
+## 目录
 1. 什么是AST
 2. JavaScript属于哪种类型语言
 3. The ESTree specification.
@@ -19,7 +19,7 @@
 6. AST在JavaScript内的应用场景
 7. 总结
 
-### 什么是AST
+## 什么是AST
 
 AST（Abstract Syntax Tree，抽象语法树）在 [Wikipedia](https://en.wikipedia.org/wiki/Abstract_syntax_tree) 的定义如下：
 
@@ -28,7 +28,7 @@ AST（Abstract Syntax Tree，抽象语法树）在 [Wikipedia](https://en.wikipe
 > 在计算机科学中，抽象语法树（AST）或语法树是用编程语言编写的源代码的抽象语法结构的树表示。
 树的每个节点表示在源代码中出现的构造。
 
-### JavaScript属于哪种类型语言
+## JavaScript属于哪种类型语言
 
 计算机语言按类型分可以分为编译型语言及解释型语言
 
@@ -88,7 +88,7 @@ JavaScript 是一门解释型语言，所以其解释过程如下所示,解释�
   **代码生成**   ===>   将 AST 转换为可执行代码
 ```
 
-### The ESTree specification
+## The ESTree specification
 
 The ESTree Spec: AST语法树规范，一位Mozilla工程师在Firefox中创建了一个API，将SpiderMonkey引擎的JavaScript解析器公开为JavaScript API。所述工程师记录了它产生的格式，这种格式作为操纵JavaScript源代码的工具的通用语言，现在遵循这个规范的parser有Esprima、acorn、espree、@babel/parser
 
@@ -102,7 +102,7 @@ SpiderMonkey 提供来了一系列可供Js操作的API，如Reflect.parse(src[, 
 
 默认情况下, Reflect.parse() 生成Node对象, 即普通的JavaScript对象 (它们的原型来自标准的Object原型). 所有的节点类型都实现了以下的接口
 
-```
+```ts
 // 节点接口，必须有type字段，代表AST变量类型，使用这个字段去决定一个节点要实现的接口，如Program，Function都
 interface Node {
     type: string;
@@ -125,7 +125,7 @@ interface Position {
 
 举个例子
 
-```
+```ts
 function printLabel(labelledObj: { label: string }) {
   console.log(labelledObj.label);
 }
@@ -136,7 +136,7 @@ printLabel(myObj);
 
 使用接口来重写
 
-```
+```ts
 interface LabelledValue {
   label: string;
 }
@@ -154,7 +154,7 @@ printLabel(myObj);
 AST中主要有以下接口
 
 程序，一个完整的程序源代码树。一般就是一个单独的js文件
-```
+```ts
 interface Program <: Node {
     type: "Program";
     body: [ Statement ];
@@ -164,7 +164,7 @@ interface Program <: Node {
 如图所示，以Esprima为例，因为Esprima，因为Esprima语法树格式源自Mozilla Parser API的原始版本，然后将其形式化并扩展为ESTree规范
 
 函数接口
-```
+```ts
 interface Function <: Node {
     id: Identifier | null; // 函数名
     params: [ Pattern ];  // 参数
@@ -177,19 +177,19 @@ interface Function <: Node {
 ```
 
 任意语句接口
-```
+```ts
 interface Statement <: Node { }
 ```
 
 空语句接口，一个空语句,也就是,一个孤立的分号
-```
+```ts
 interface EmptyStatement <: Statement {
     type: "EmptyStatement";
 }
 ```
 
 块语句接口，也就是由大括号包围的语句序列.
-```
+```ts
 interface BlockStatement <: Statement {
     type: "BlockStatement";
     body: [ Statement ];
@@ -197,7 +197,7 @@ interface BlockStatement <: Statement {
 ```
 
 表达式语句接口，一个表达式语句,也就是,仅有一个表达式组成的语句
-```
+```ts
 interface ExpressionStatement <: Statement {
     type: "ExpressionStatement";
     expression: Expression;
@@ -205,7 +205,7 @@ interface ExpressionStatement <: Statement {
 ```
 
 一个if语句接口
-```
+```ts
 interface IfStatement <: Statement {
     type: "IfStatement";
     test: Expression;
@@ -215,7 +215,7 @@ interface IfStatement <: Statement {
 ```
 
 一个标签语句接口,也就是, a statement prefixed by a break/continue label
-```
+```ts
 interface LabeledStatement <: Statement {
     type: "LabeledStatement";
     label: Identifier;
@@ -224,7 +224,7 @@ interface LabeledStatement <: Statement {
 ```
 
 一个break语句接口
-```
+```ts
 interface BreakStatement <: Statement {
     type: "BreakStatement";
     label: Identifier | null;
@@ -232,7 +232,7 @@ interface BreakStatement <: Statement {
 ```
 
 一个continue语句接口
-```
+```ts
 interface ContinueStatement <: Statement {
     type: "ContinueStatement";
     label: Identifier | null;
@@ -240,7 +240,7 @@ interface ContinueStatement <: Statement {
 ```
 
 一个with语句接口
-```
+```ts
 interface WithStatement <: Statement {
     type: "WithStatement";
     object: Expression;
@@ -249,7 +249,7 @@ interface WithStatement <: Statement {
 ```
 
 一个switch语句接口
-```
+```ts
 interface SwitchStatement <: Statement {
     type: "SwitchStatement";
     discriminant: Expression;
@@ -259,7 +259,7 @@ interface SwitchStatement <: Statement {
 ```
 
 一个return语句接口
-```
+```ts
 interface ReturnStatement <: Statement {
     type: "ReturnStatement";
     argument: Expression | null;
@@ -267,7 +267,7 @@ interface ReturnStatement <: Statement {
 ```
 
 一个throw语句接口
-```
+```ts
 interface ThrowStatement <: Statement {
     type: "ThrowStatement";
     argument: Expression;
@@ -275,7 +275,7 @@ interface ThrowStatement <: Statement {
 ```
 
 一个try语句接口
-```
+```ts
 interface TryStatement <: Statement {
     type: "TryStatement";
     block: BlockStatement;
@@ -285,7 +285,7 @@ interface TryStatement <: Statement {
 ```
 
 一个while语句接口
-```
+```ts
 interface WhileStatement <: Statement {
     type: "WhileStatement";
     test: Expression;
@@ -294,7 +294,7 @@ interface WhileStatement <: Statement {
 ```
 
 一个do/while语句接口
-```
+```ts
 interface DoWhileStatement <: Statement {
     type: "DoWhileStatement";
     body: Statement;
@@ -303,7 +303,7 @@ interface DoWhileStatement <: Statement {
 ```
 
 一个for语句接口
-```
+```ts
 interface ForStatement <: Statement {
     type: "ForStatement";
     init: VariableDeclaration | Expression | null;
@@ -314,7 +314,7 @@ interface ForStatement <: Statement {
 ```
 
 一个for/in语句接口, or, if each is true, a for each/in 语句.
-```
+```ts
 interface ForInStatement <: Statement {
     type: "ForInStatement";
     left: VariableDeclaration |  Expression;
@@ -325,7 +325,7 @@ interface ForInStatement <: Statement {
 ```
 
 一个let语句接口
-```
+```ts
 interface LetStatement <: Statement {
     type: "LetStatement";
     head: [ { id: Pattern, init: Expression | null } ];
@@ -334,19 +334,19 @@ interface LetStatement <: Statement {
 ```
 
 一个debugger语句接口
-```
+```ts
 interface DebuggerStatement <: Statement {
     type: "DebuggerStatement";
 }
 ```
 
 声明接口
-```
+```ts
 interface Declaration <: Statement { }
 ```
 
 一个函数声明接口
-```
+```ts
 interface FunctionDeclaration <: Function, Declaration {
     type: "FunctionDeclaration";
     id: Identifier;
@@ -360,7 +360,7 @@ interface FunctionDeclaration <: Function, Declaration {
 ```
 
 一个变量声明接口,可以通过var, let, 或const
-```
+```ts
 interface VariableDeclaration <: Declaration {
     type: "VariableDeclaration";
     declarations: [ VariableDeclarator ];
@@ -369,7 +369,7 @@ interface VariableDeclaration <: Declaration {
 ```
 
 一个变量声明符接口
-```
+```ts
 interface VariableDeclarator <: Node {
     type: "VariableDeclarator";
     id: Pattern;
@@ -378,19 +378,19 @@ interface VariableDeclarator <: Node {
 ```
 
 任意表达式接口
-```
+```ts
 interface Expression <: Node, Pattern { }
 ```
 
 一个this表达式接口
-```
+```ts
 interface ThisExpression <: Expression {
     type: "ThisExpression";
 }
 ```
 
 一个数组表达式接口
-```
+```ts
 interface ArrayExpression <: Expression {
     type: "ArrayExpression";
     elements: [ Expression | null ];
@@ -398,7 +398,7 @@ interface ArrayExpression <: Expression {
 ```
 
 一个对象表达式接口
-```
+```ts
 interface ObjectExpression <: Expression {
     type: "ObjectExpression";
     properties: [ { key: Literal | Identifier,
@@ -408,7 +408,7 @@ interface ObjectExpression <: Expression {
 ```
 
 一个函数表达式接口
-```
+```ts
 interface FunctionExpression <: Function, Expression {
     type: "FunctionExpression";
     id: Identifier | null;
@@ -422,7 +422,7 @@ interface FunctionExpression <: Function, Expression {
 ```
 
 一个序列表达式接口,也就是一个由逗号分割的表达式序列
-```
+```ts
 interface SequenceExpression <: Expression {
     type: "SequenceExpression";
     expressions: [ Expression ];
@@ -430,7 +430,7 @@ interface SequenceExpression <: Expression {
 ```
 
 一元运算符表达式接口
-```
+```ts
 interface UnaryExpression <: Expression {
     type: "UnaryExpression";
     operator: UnaryOperator;
@@ -440,7 +440,7 @@ interface UnaryExpression <: Expression {
 ```
 
 一个二元运算符表达式接口
-```
+```ts
 interface BinaryExpression <: Expression {
     type: "BinaryExpression";
     operator: BinaryOperator;
@@ -450,7 +450,7 @@ interface BinaryExpression <: Expression {
 ```
 
 赋值表达式接口
-```
+```ts
 interface AssignmentExpression <: Expression {
     type: "AssignmentExpression";
     operator: AssignmentOperator;
@@ -460,7 +460,7 @@ interface AssignmentExpression <: Expression {
 ```
 
 自增自减表达式接口
-```
+```ts
 interface UpdateExpression <: Expression {
     type: "UpdateExpression";
     operator: UpdateOperator;
@@ -470,7 +470,7 @@ interface UpdateExpression <: Expression {
 ```
 
 逻辑运算符表达式接口
-```
+```ts
 interface LogicalExpression <: Expression {
     type: "LogicalExpression";
     operator: LogicalOperator;
@@ -480,7 +480,7 @@ interface LogicalExpression <: Expression {
 ```
 
 条件运算符表达式接口
-```
+```ts
 interface ConditionalExpression <: Expression {
     type: "ConditionalExpression";
     test: Expression;
@@ -490,7 +490,7 @@ interface ConditionalExpression <: Expression {
 ```
 
 new操作符表达式接口
-```
+```ts
 interface NewExpression <: Expression {
     type: "NewExpression";
     callee: Expression;
@@ -499,7 +499,7 @@ interface NewExpression <: Expression {
 ```
 
 函数调用表达式接口
-```
+```ts
 interface CallExpression <: Expression {
     type: "CallExpression";
     callee: Expression;
@@ -508,7 +508,7 @@ interface CallExpression <: Expression {
 ```
 
 属性表达式接口
-```
+```ts
 interface MemberExpression <: Expression {
     type: "MemberExpression";
     object: Expression;
@@ -518,14 +518,14 @@ interface MemberExpression <: Expression {
 ```
 
 yield表达式接口
-```
+```ts
 interface YieldExpression <: Expression {
     argument: Expression | null;
 }
 ```
 
 generator表达式接口
-```
+```ts
 interface GeneratorExpression <: Expression {
     body: Expression;
     blocks: [ ComprehensionBlock ];
@@ -534,7 +534,7 @@ interface GeneratorExpression <: Expression {
 ```
 
 let表达式接口
-```
+```ts
 interface LetExpression <: Expression {
     type: "LetExpression";
     head: [ { id: Pattern, init: Expression | null } ];
@@ -543,12 +543,12 @@ interface LetExpression <: Expression {
 ```
 
 模式接口
-```
+```ts
 interface Pattern <: Node { }
 ```
 
 对象结构赋值模式接口
-```
+```ts
 interface ObjectPattern <: Pattern {
     type: "ObjectPattern";
     properties: [ { key: Literal | Identifier, value: Pattern } ];
@@ -556,7 +556,7 @@ interface ObjectPattern <: Pattern {
 ```
 
 数组结构赋值模式接口
-```
+```ts
 interface ArrayPattern <: Pattern {
     type: "ArrayPattern";
     elements: [ Pattern | null ];
@@ -564,7 +564,7 @@ interface ArrayPattern <: Pattern {
 ```
 
 case模式接口
-```
+```ts
 interface SwitchCase <: Node {
     type: "SwitchCase";
     test: Expression | null;
@@ -573,7 +573,7 @@ interface SwitchCase <: Node {
 ```
 
 catch字句接口
-```
+```ts
 interface CatchClause <: Node {
     type: "CatchClause";
     param: Pattern;
@@ -583,7 +583,7 @@ interface CatchClause <: Node {
 ```
 
 标识符。标识符可以是表达式或解构模式。
-```
+```ts
 interface Identifier <: Node, Expression, Pattern {
     type: "Identifier";
     name: string;
@@ -591,7 +591,7 @@ interface Identifier <: Node, Expression, Pattern {
 ```
 
 字面标记。字面可以是表达式
-```
+```ts
 interface Literal <: Node, Expression {
     type: "Literal";
     value: string | boolean | null | number | RegExp;
@@ -599,14 +599,14 @@ interface Literal <: Node, Expression {
 ```
 
 一元操作符
-```
+```ts
 enum UnaryOperator {
     "-" | "+" | "!" | "~" | "typeof" | "void" | "delete"
 }
 ```
 
 二元操作符
-```
+```ts
 enum BinaryOperator {
     "==" | "!=" | "===" | "!=="
          | "<" | "<=" | ">" | ">="
@@ -618,14 +618,14 @@ enum BinaryOperator {
 ```
 
 逻辑运算符
-```
+```ts
 enum LogicalOperator {
     "||" | "&&"
 }
 ```
 
 赋值运算符
-```
+```ts
 enum AssignmentOperator {
     "=" | "+=" | "-=" | "*=" | "/=" | "%="
         | "<<=" | ">>=" | ">>>="
@@ -634,7 +634,7 @@ enum AssignmentOperator {
 ```
 
 自增自减操作符
-```
+```ts
 enum UpdateOperator {
     "++" | "--"
 }
@@ -643,7 +643,7 @@ enum UpdateOperator {
 ES6新增的接口
 
 箭头函数接口
-```
+```ts
 interface ArrowFunctionExpression {
     type: 'ArrowFunctionExpression';
     id: Identifier | null;
@@ -656,7 +656,7 @@ interface ArrowFunctionExpression {
 ```
 
 Class类接口
-```
+```ts
 interface ClassDeclaration {
     type: 'ClassDeclaration';
     id: Identifier | null;
@@ -690,7 +690,7 @@ interface Super {
 }
 ```
 
-```
+```ts
 interface TaggedTemplateExpression {
     type: 'TaggedTemplateExpression';
     readonly tag: Expression;
@@ -710,21 +710,21 @@ interface TemplateLiteral {
 }
 ```
 
-```
+```ts
 interface SpreadElement {
     type: 'SpreadElement';
     argument: Expression;
 }
 ```
 
-```
+```ts
 interface AwaitExpression {
     type: 'AwaitExpression';
     argument: Expression;
 }
 ```
 
-```
+```ts
 type ImportDeclaration {
     type: 'ImportDeclaration';
     specifiers: ImportSpecifier[];
@@ -738,7 +738,7 @@ interface ImportSpecifier {
 }
 ```
 
-```
+```ts
 interface ExportAllDeclaration {
     type: 'ExportAllDeclaration';
     source: Literal;
@@ -763,7 +763,7 @@ interface ExportSpecifier {
 };
 ```
 
-### 常用的Javascript Parser
+## 常用的Javascript Parser
 
 [Esprima](https://esprima.org/) 经典的AST解析器,文档齐全；
 [UglifyJS](https://github.com/mishoo/UglifyJS) 最初的代码代码压缩工具，自带AST解析器，但没有遵守The ESTree Spec
@@ -775,7 +775,7 @@ interface ExportSpecifier {
 各个 parser解析的速度对比可以参见 [Speed Comparison](https://esprima.org/test/compare.html)
 
 Esprima的使用方式
-```
+```js
 var esprima = require('esprima');
 var program = 'const answer = 42';
 
@@ -794,11 +794,11 @@ esprima.parse(program);
   sourceType: 'script' }
 ```
 
-### 怎样生成AST
+## 怎样生成AST
 
 以the-super-tiny-compiler来分析
 
-```
+```js
 function tokenizer(input) {
 
   // 定义一个current变量，像光标一样记录我们字符串代码的位置
@@ -1066,12 +1066,12 @@ function parser(tokens) {
 }
 ```
 
-### AST在JavaScript内的应用场景
+## AST在JavaScript内的应用场景
 
 在明白了js代码最终是被生成AST，然后被解释执行之后，那么只要涉及到代码处理的场景，都可以运用AST来帮助我们处理对应的场景；
 如：代码压缩(uglify)、代码检查(eslint)、代码转化(babel)、代码格式化(prettier)、构建打包(webpack、rollup)、IDE只能提示、代码混淆等
 
-### 总结
+## 总结
 
 随着近年来JavaScript的快速发展，前段开发越来越自动化，工程化，而AST在这其中扮演着一个重要的角色，它帮助开发来很多提高开发效率的工具，而当我们掌握来AST之后，我们自己也可以去任何可以提高我们工作效率的工具；
 

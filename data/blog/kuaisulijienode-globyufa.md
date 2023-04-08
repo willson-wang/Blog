@@ -3,7 +3,7 @@
   date: 2022-02-25T07:59:06Z
   lastmod: 2023-03-25T12:18:38Z
   summary: 
-  tags: ["node"]
+  tags: ["node", "glob语法"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/glob.webp']
@@ -19,13 +19,13 @@
 
 
 
-### 背景
+## 背景
 
 封装了一个基于`rollup`的构建工具，在多`entry`场景下，只需要写一个简单的glob语句就行，而不用自己遍历或者手动写上所有的entry路径，但是在使用的过程中，总是受到`.d.ts`及`__tests__`目录下的文件干扰，所以在解决了问题之后，总结一下，方便后面在有类似问题的时候可以快速解决
 
 
 
-### glob语法
+## glob语法
 
 理解glob语法的两个关键点
 
@@ -52,11 +52,11 @@ glob匹配看了下大概的源码是通过对传入的`glob`语句，按照`/`�
 
 
 
-### 常用应用场景
+## 常用应用场景
 
 以下面的文件结构作为测试目录
 
-#### 文件目录结构
+### 文件目录结构
 
 ```
 .
@@ -127,9 +127,9 @@ glob匹配看了下大概的源码是通过对传入的`glob`语句，按照`/`�
 
 
 
-**匹配src目录下所有的ts文件，不包括子目录**
+### 匹配src目录下所有的ts文件，不包括子目录
 
-```
+```shell
 'src/*.ts'
 =>
 'src/componentsCss.ts',
@@ -143,9 +143,9 @@ glob匹配看了下大概的源码是通过对传入的`glob`语句，按照`/`�
 
 
 
-**匹配src目录下所有的ts、js文件，不包括子目录**
+### 匹配src目录下所有的ts、js文件，不包括子目录
 
-```
+```shell
 'src/*.[t|j]s' or 'src/*.[tj]s' 这两种写法是等价的
 =>
 'src/componentsCss.ts',
@@ -158,9 +158,9 @@ glob匹配看了下大概的源码是通过对传入的`glob`语句，按照`/`�
 
 
 
-**匹配src目录下所有的ts、js、tsx、jsx文件，不包括子目录**
+### 匹配src目录下所有的ts、js、tsx、jsx文件，不包括子目录
 
-```
+```shell
 'src/*.[t|j]s?(x)' or src/*.[tj]s?(x)
 =>
 'src/abc.jsx',
@@ -175,9 +175,9 @@ glob匹配看了下大概的源码是通过对传入的`glob`语句，按照`/`�
 
 
 
-**匹配src目录下除以js结尾的其它符号s结尾的文件，不包括子目录**
+### 匹配src目录下除以js结尾的其它符号s结尾的文件，不包括子目录
 
-```
+```shell
 src/*.[^j]s or 'src/*.[!j]s'
 =>
 'src/componentsCss.ts',
@@ -189,9 +189,9 @@ src/*.[^j]s or 'src/*.[!j]s'
 
 
 
-**匹配src目录下除index.ts与abc.ts之外的其它.ts文件，不包括子目录**
+### 匹配src目录下除index.ts与abc.ts之外的其它.ts文件，不包括子目录
 
-```
+```shell
 'src/!(index|abc).ts'
 =>
 'src/componentsCss.ts',
@@ -202,9 +202,9 @@ src/*.[^j]s or 'src/*.[!j]s'
 
 
 
-**src目录下abc.tsx or ab任意字符.ts结尾的文件，不包括子目录**
+### src目录下abc.tsx or ab任意字符.ts结尾的文件，不包括子目录
 
-```
+```shell
 'src/ab?.tsx'
 =>
 'src/abc.tsx'
@@ -212,9 +212,9 @@ src/*.[^j]s or 'src/*.[!j]s'
 
 
 
-**src目录及所有子目录下的以ts结尾的文件**
+### src目录及所有子目录下的以ts结尾的文件
 
-```
+```shell
 src/**/*.ts
 =>
 'src/__tests__/fixtures/css-module/expect.ts',
@@ -235,9 +235,9 @@ src/**/*.ts
 
 
 
-**src目录下以ts结尾的文件，及子目录__test__下以ts结尾的文件，不包括其它src下的子目录**
+### src目录下以ts结尾的文件，及子目录__test__下以ts结尾的文件，不包括其它src下的子目录
 
-```
+```shell
 src/{*.ts,__tests__/*.ts}
 =>
 'src/__tests__/index.test.ts',
@@ -250,9 +250,9 @@ src/{*.ts,__tests__/*.ts}
 
 
 
-**src除__tests__之外二级目录下以.ts结尾的文件,不包含三级及以上目录**
+### src除__tests__之外二级目录下以.ts结尾的文件,不包含三级及以上目录
 
-```
+```shell
 src/!(__tests__)/*.ts
 =>
 'src/components/button.d.ts', 'src/components/button.ts'
@@ -260,9 +260,9 @@ src/!(__tests__)/*.ts
 
 
 
-**src除__tests__之外二级及二级以上目录下以.ts结尾的文件**
+### src除__tests__之外二级及二级以上目录下以.ts结尾的文件
 
-```
+```shell
 src/!(__tests__)/**/*.ts
 =>
 'src/components/alert/index.d.ts',
@@ -273,11 +273,11 @@ src/!(__tests__)/**/*.ts
 
 
 
-**匹配src一级目录及除__tests__之外二级及二级以下目录下除.d.ts之外以.ts结尾的文件**
+### 匹配src一级目录及除__tests__之外二级及二级以下目录下除.d.ts之外以.ts结尾的文件
 
 
 
-```
+```shell
 src/{!(*.d).ts,!(__tests__)/**/!(*.d).ts}
 =>
 'src/components/alert/index.ts',
@@ -290,7 +290,7 @@ src/{!(*.d).ts,!(__tests__)/**/!(*.d).ts}
 
 
 
-```
+```js
 glob.sync('src/**/*.ts', {
     cwd: process.cwd(),
     ignore: ['{!(node_modules|dist)/**/*.d.ts,{!(node_modules|dist)/?(test|tests|__tests__|__test__),test,tests,__tests__,__test__}/**/*.ts}']
@@ -299,9 +299,9 @@ glob.sync('src/**/*.ts', {
 
 
 
-**匹配不了任何文件**
+### 匹配不了任何文件
 
-```
+```shell
 __tests__
 =>
 []
@@ -309,9 +309,9 @@ __tests__
 
 
 
-**匹配cwd目录下任何`__tests__`目录下的任何目录及文件**
+### 匹配cwd目录下任何`__tests__`目录下的任何目录及文件
 
-```
+```shell
 **/__tests__/**
 =>
 'node_modules/import-sort-style-custom/dist/__tests__',
@@ -347,9 +347,9 @@ __tests__
 
 
 
-**匹配cwd目录下任何`__tests__`子目录下的任何目录及文件**
+### 匹配cwd目录下任何`__tests__`子目录下的任何目录及文件
 
-```
+```shell
 **/__tests__/**/*
 => 
 'node_modules/import-sort-style-custom/dist/__tests__/index.test.d.ts',
@@ -380,9 +380,9 @@ __tests__
 
 
 
-**匹配cwd目录下任何`__tests__`子目录下的任何目录及文件**
+### 匹配cwd目录下任何`__tests__`子目录下的任何目录及文件
 
-```
+```shell
 '**/__tests__/**/*.*'
 =>
 'node_modules/import-sort-style-custom/dist/__tests__/index.test.d.ts',
@@ -407,9 +407,9 @@ __tests__
 
 
 
-**匹配cwd目录下任何`__tests__`目录**
+### 匹配cwd目录下任何`__tests__`目录
 
-```
+```shell
 **/__tests__ or **/__tests__/
 =>
 'node_modules/import-sort-style-custom/dist/__tests__',
@@ -419,9 +419,9 @@ __tests__
 
 
 
-**匹配cwd目录下所有.ts结尾的文件**
+### 匹配cwd目录下所有.ts结尾的文件
 
-```
+```shell
 **/*.ts
 =>
 'dist/componentsCss.d.ts',
@@ -437,9 +437,9 @@ __tests__
 
 
 
-**匹配cwd目录下除node_modules之外一级目录下的以.ts结尾的文件**
+### 匹配cwd目录下除node_modules之外一级目录下的以.ts结尾的文件
 
-```
+```shell
 !(node_modules)/*.ts
 =>
 'dist/componentsCss.d.ts',
@@ -456,9 +456,9 @@ __tests__
 
 
 
-**匹配所有.d.ts文件及test相关目录下的ts文件**
+### 匹配所有.d.ts文件及test相关目录下的ts文件
 
-```
+```shell
 {!(node_modules|dist)/**/*.d.ts,{!(node_modules|dist)/?(test|tests|__tests__|__test__),test,tests,__tests__,__test__}/**/*.ts}
 =>
 'src/__tests__/fixtures/css-module/expect.ts',
@@ -474,9 +474,9 @@ __tests__
 
 
 
-**匹配src下的所有目录及文件**
+### 匹配src下的所有目录及文件
 
-```
+```shell
 src/**/*
 =>
 'src/__tests__',
@@ -517,6 +517,6 @@ src/**/*
 
 
 
-### 总结
+## 总结
 
 glob语法在很多前端工具中都有用到，比如`prettier`、`eslint`、`stylelint`、`babel`、`typescript`等,都是作为查找输入文件的语法，虽然语法上可能会有差异，但是大同小异，掌握了之后基本上可以快速写出符合要求的glob语句，而不用每次想要的时候再去找文档，记这个的原因也是，下次有场景不记得了，直接来这里找下

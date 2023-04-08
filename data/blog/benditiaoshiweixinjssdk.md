@@ -3,7 +3,7 @@
   date: 2020-03-20T14:43:52Z
   lastmod: 2020-03-20T15:15:05Z
   summary: 
-  tags: ["原生JS"]
+  tags: ["原生JS", "微信", "jssdk", "charles"]
   draft: false
   layout: PostLayout
   images: ['/static/images/banner/js4.jpeg']
@@ -16,11 +16,11 @@
 
 思路二：使用charles等抓包工具将测试or生产环境直接代理到本地，访问本地代码
 
-### 配置测试环境or生产环境的域名访问本地项目
+## 配置测试环境or生产环境的域名访问本地项目
 
 1、配置host，将测试or生产的域名指向本地的127.0.0.1
 
-```
+```shell
 127.0.0.1 webapp.test.com
 ```
 
@@ -28,7 +28,7 @@
 
 2、如果本地项目端口不是80端口而是其它端口，则需要使用nginx等工具将80端口转发到我们本地项目的实际端口，如果是80端口则直接忽略这一步
 
-```
+```shell
 // mac 下查看某个端口是否被占用
 lsof -i:80
 
@@ -38,7 +38,7 @@ kill pid
 
 转发80端口的目的是因为jssdk配置的安全域名仅支持80（http）和443（https）两个端口
 
-```
+```js
 server {
     listen 80;
     server_name webapp.test.com;
@@ -93,11 +93,11 @@ hosts在各个系统中所在的文件夹：
 Windows 系统hosts位于 C:\Windows\System32\drivers\etc\hostsAndroid
 Mac（苹果电脑）系统hosts位于 /etc/hosts
 
-### 使用charles等抓包工具将测试or生产环境的代码代理到本地
+## 使用charles等抓包工具将测试or生产环境的代码代理到本地
 
 可以参考[移动端抓包及调试](https://github.com/willson-wang/Blog/issues/35)
 
-参考链接：
+## 参考链接
 https://osxdaily.com/2015/03/31/clear-dns-cache-ios/
 https://www.jianshu.com/p/302571f2dae0
 https://juejin.im/post/5c71f8eef265da2db5423bc3
